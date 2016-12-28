@@ -13,7 +13,6 @@
     <licenseUrl>https://github.com/PeterKottas/DotNetCore.WindowsService/blob/master/LICENSE</licenseUrl>
   </metadata>
 	<files>
-    <file src="bin\Release\netstandard1.6\*.dll" target="lib\netstandard1.6" />
     <file src="bin\Release\netcoreapp1.1\*.dll" target="lib\netcoreapp1.1" />
   </files>
 </package>
