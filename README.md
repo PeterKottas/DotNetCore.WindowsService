@@ -10,6 +10,7 @@ Using nuget:
 ## Usage
 
 1. Create .NETCore console app with a project.json simmilar to this:
+	
 	```cs
 	{
 		"version": "1.0.0-*",
