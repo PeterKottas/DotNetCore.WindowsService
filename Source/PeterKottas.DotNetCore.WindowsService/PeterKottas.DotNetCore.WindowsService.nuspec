@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>PeterKottas.DotNetCore.WindowsService</id>
+    <title>PeterKottas.DotNetCore.WindowsService</title>
+    <version>1.0.0</version>
+    <authors>Peter Kottas</authors>
+    <description>Easiest to use library that allows one to host .net core as windows services there is.</description>
+    <summary>.NET Core Windows service</summary>
+    <language>en-US</language>
+    <tags>dotnetcore,.netcore,'windows service','micro service'</tags>
+    <projectUrl>https://github.com/PeterKottas/DotNetCore.WindowsService</projectUrl>
+    <licenseUrl>https://github.com/PeterKottas/DotNetCore.WindowsService/blob/master/LICENSE</licenseUrl>
+  </metadata>
+	<files>
+    <file src="bin\Release\netstandard1.6\*.dll" target="lib\netstandard1.6" />
+    <file src="bin\Release\netcoreapp1.1\*.dll" target="lib\netcoreapp1.1" />
+  </files>
+</package>
