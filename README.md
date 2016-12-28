@@ -10,79 +10,79 @@ Using nuget:
 ## Usage
 
 1. Create .NETCore console app with a project.json simmilar to this:
-```cs
-{
-  "version": "1.0.0-*",
-  "buildOptions": {
-    "emitEntryPoint": true
-  },
-  "frameworks": {
-    "netcoreapp1.1": {
-      "dependencies": {
-        "Microsoft.NETCore.App": {
-          "version": "1.1.0"//Optionally add "type": "platform" if you don't want self contained app
-        }
-      },
-      "imports": "dnxcore50"
-    }
-  },
-  "runtimes": { //Optionally add runtimes that you want to support
-    "win81-x64": {}
-  }
-}
-```
+	```cs
+	{
+		"version": "1.0.0-*",
+		"buildOptions": {
+			"emitEntryPoint": true
+		},
+		"frameworks": {
+			"netcoreapp1.1": {
+				"dependencies": {
+					"Microsoft.NETCore.App": {
+						"version": "1.1.0"//Optionally add "type": "platform" if you don't want self contained app
+					}
+				},
+				"imports": "dnxcore50"
+			}
+		},
+		"runtimes": { //Optionally add runtimes that you want to support
+			"win81-x64": {}
+		}
+	}
+	```
 2. Create your first service, something like this:
-```cs
-public class ExampleService : IMicroService
-{
-  public void Start()
-  {
-    Console.WriteLine("I started");
-  }
-  
-	public void Stop()
-  {
-    Console.WriteLine("I stopped");
-  }
-}
-```
+	```cs
+	public class ExampleService : IMicroService
+	{
+		public void Start()
+		{
+			Console.WriteLine("I started");
+		}
+		
+		public void Stop()
+		{
+			Console.WriteLine("I stopped");
+		}
+	}
+	```
 3. Api for services (and yeah, it's simmilar to Topshelf, thanks for inspiration, I just couldn't wait for you guys to implement this):
-```cs
-ServiceRunner<ExampleService>.Run(config =>
-{
-  var name = config.GetDefaultName();
-  config.Service(serviceConfig =>
-		{
-			serviceConfig.ServiceFactory(() =>
-		{
-			return new ExampleService();
-		});
-		serviceConfig.OnStart(service =>
-		{
-			Console.WriteLine("Service {0} started", name);
-			service.Start();
-		});
+	```cs
+	ServiceRunner<ExampleService>.Run(config =>
+	{
+		var name = config.GetDefaultName();
+		config.Service(serviceConfig =>
+			{
+				serviceConfig.ServiceFactory(() =>
+			{
+				return new ExampleService();
+			});
+			serviceConfig.OnStart(service =>
+			{
+				Console.WriteLine("Service {0} started", name);
+				service.Start();
+			});
 
-		serviceConfig.OnStop(service =>
-		{
-			Console.WriteLine("Service {0} stopped", name);
-			service.Stop();
-		});
+			serviceConfig.OnStop(service =>
+			{
+				Console.WriteLine("Service {0} stopped", name);
+				service.Stop();
+			});
 
-		serviceConfig.OnError(e =>
-		{
-			Console.WriteLine("Service {0} errored with exception : {1}", name, e.Message);
+			serviceConfig.OnError(e =>
+			{
+				Console.WriteLine("Service {0} errored with exception : {1}", name, e.Message);
+			});
 		});
-  });
-});
-```
+	});
+	```
 4. Optionally set the name of the service like this:
-```cs
-ServiceRunner<ExampleService>.Run(config =>
-{
-	config.SetName("MyTestService");
-});
-```
+	```cs
+	ServiceRunner<ExampleService>.Run(config =>
+	{
+		config.SetName("MyTestService");
+	});
+	```
 5. Run the service without arguments and it runs like console app.
 6. Run the service with **action:install** and it will install the service.
 7. Run the service with **action:uninstall** and it will uninstall the service.
