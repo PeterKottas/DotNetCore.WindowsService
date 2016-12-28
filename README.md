@@ -78,6 +78,7 @@ Using nuget:
 	});
 	```
 4. Optionally set the name of the service like this:
+	
 	```cs
 	ServiceRunner<ExampleService>.Run(config =>
 	{
