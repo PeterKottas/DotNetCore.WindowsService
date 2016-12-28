@@ -10,6 +10,7 @@ Using nuget:
 ## Usage
 
 1. Create .NETCore console app with a project.json simmilar to this:
+	
 	```cs
 	{
 		"version": "1.0.0-*",
@@ -77,6 +78,7 @@ Using nuget:
 	});
 	```
 4. Optionally set the name of the service like this:
+	
 	```cs
 	ServiceRunner<ExampleService>.Run(config =>
 	{
