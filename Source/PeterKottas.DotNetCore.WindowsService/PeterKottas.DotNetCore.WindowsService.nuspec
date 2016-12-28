@@ -11,6 +11,11 @@
     <tags>dotnetcore,.netcore,'windows service','micro service'</tags>
     <projectUrl>https://github.com/PeterKottas/DotNetCore.WindowsService</projectUrl>
     <licenseUrl>https://github.com/PeterKottas/DotNetCore.WindowsService/blob/master/LICENSE</licenseUrl>
+    <dependencies>
+      <dependency id="DasMulli.Win32.ServiceUtils" version="1.0.1" />
+      <dependency id="PeterKottas.DotNetCore.CmdArgParser" version="1.0.4" />
+      <dependency id="System.ServiceProcess.ServiceController" version="4.3.0" />
+    </dependencies>
   </metadata>
 	<files>
     <file src="bin\Release\netcoreapp1.1\*.dll" target="lib\netcoreapp1.1" />
