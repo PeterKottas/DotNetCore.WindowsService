@@ -83,7 +83,7 @@ Using nuget:
 			{
 				return new ExampleService();
 			});
-			serviceConfig.OnStart(service =>
+			serviceConfig.OnStart((service, extraArguments) =>
 			{
 				Console.WriteLine("Service {0} started", name);
 				service.Start();
