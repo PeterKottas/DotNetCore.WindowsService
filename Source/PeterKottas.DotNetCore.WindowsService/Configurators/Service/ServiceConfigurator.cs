@@ -1,5 +1,6 @@
 ﻿using PeterKottas.DotNetCore.WindowsService.Interfaces;
 using System;
+using System.Collections.Generic;
 
 namespace PeterKottas.DotNetCore.WindowsService.Configurators.Service
 {
@@ -16,7 +17,7 @@ namespace PeterKottas.DotNetCore.WindowsService.Configurators.Service
             config.ServiceFactory = serviceFactory;
         }
 
-        public void OnStart(Action<SERVICE> onStart)
+        public void OnStart(Action<SERVICE, List<string>> onStart)
         {
             config.OnServiceStart = onStart;
         }

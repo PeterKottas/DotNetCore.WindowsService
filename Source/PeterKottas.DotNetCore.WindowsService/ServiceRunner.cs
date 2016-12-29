@@ -244,7 +244,7 @@ namespace PeterKottas.DotNetCore.WindowsService
         {
             try
             {
-                config.OnServiceStart(config.Service);
+                config.OnServiceStart(config.Service, config.ExtraArguments);
             }
             catch (Exception e)
             {

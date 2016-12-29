@@ -33,7 +33,7 @@ namespace PeterKottas.DotNetCore.WindowsService
 
         public Func<SERVICE> ServiceFactory { get; set; }
 
-        public Action<SERVICE> OnServiceStart { get; set; }
+        public Action<SERVICE, List<string>> OnServiceStart { get; set; }
 
         public Action<SERVICE> OnServiceStop { get; set; }
 

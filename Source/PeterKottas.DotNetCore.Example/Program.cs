@@ -19,7 +19,8 @@ namespace PeterKottas.DotNetCore.Example
                     {
                         return new ExampleServiceTimer();
                     });
-                    serviceConfig.OnStart(service =>
+
+                    serviceConfig.OnStart((service, extraParams) =>
                     {
                         Console.WriteLine("Service {0} started", name);
                         service.Start();
