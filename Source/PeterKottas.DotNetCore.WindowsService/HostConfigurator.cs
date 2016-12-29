@@ -17,7 +17,26 @@ namespace PeterKottas.DotNetCore.WindowsService
 
         public void SetName(string serviceName)
         {
-            innerConfig.Name = serviceName;
+            if (string.IsNullOrEmpty(innerConfig.Name))
+            {
+                innerConfig.Name = serviceName;
+            }
+        }
+
+        public void SetDisplayName(string displayName)
+        {
+            if (string.IsNullOrEmpty(innerConfig.DisplayName))
+            {
+                innerConfig.DisplayName = displayName;
+            }
+        }
+
+        public void SetDescription(string description)
+        {
+            if (string.IsNullOrEmpty(innerConfig.Description))
+            {
+                innerConfig.Description = description;
+            }
         }
 
         public string GetDefaultName()

@@ -68,7 +68,7 @@ namespace PeterKottas.DotNetCore.WindowsService
                 config.AddParameter(new CmdArgParam()
                 {
                     Key = "action",
-                    Description = "Installs the service. It's run like console application othrwise",
+                    Description = "Installs the service. It's run like console application otherwise",
                     Value = val =>
                     {
                         switch (val)
