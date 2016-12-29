@@ -211,7 +211,6 @@ namespace PeterKottas.DotNetCore.WindowsService
                         break;
                     case ActionEnum.RunInteractive:
                         Start(config);
-                        Stop(config);
                         break;
                     case ActionEnum.Stop:
                         if (!(sc.Status == ServiceControllerStatus.Stopped | sc.Status==ServiceControllerStatus.StopPending))

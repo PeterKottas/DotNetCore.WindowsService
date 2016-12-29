@@ -10,14 +10,14 @@ namespace PeterKottas.DotNetCore.Example
     {
         public static void Main(string[] args)
         {
-            ServiceRunner<ExampleService>.Run(config =>
+            ServiceRunner<ExampleServiceTimer>.Run(config =>
             {
                 var name = config.GetDefaultName();
                 config.Service(serviceConfig =>
                 {
                     serviceConfig.ServiceFactory(() =>
                     {
-                        return new ExampleService();
+                        return new ExampleServiceTimer();
                     });
                     serviceConfig.OnStart(service =>
                     {

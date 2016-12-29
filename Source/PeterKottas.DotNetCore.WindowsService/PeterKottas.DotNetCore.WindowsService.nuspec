@@ -3,7 +3,7 @@
   <metadata>
     <id>PeterKottas.DotNetCore.WindowsService</id>
     <title>PeterKottas.DotNetCore.WindowsService</title>
-    <version>1.0.0</version>
+    <version>1.0.2</version>
     <authors>Peter Kottas</authors>
     <description>Easiest to use library that allows one to host .net core as windows services there is.</description>
     <summary>.NET Core Windows service</summary>

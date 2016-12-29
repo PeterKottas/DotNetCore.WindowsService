@@ -47,6 +47,31 @@ Using nuget:
 		}
 	}
 	```
+2. You can also inherit MicroService base class and take advantage of built in timers:
+	```cs
+	public class ExampleService : MicroService, IMicroService
+	{
+		public void Start()
+		{
+			this.StartBase();
+			Timers.Start("Poller", 1000, () =>
+      {
+        Console.WriteLine("Polling at {0}\n", DateTime.Now.ToString("o")));
+      },
+			(e) =>
+      {
+        Console.WriteLine("Exception while polling: {0}\n", e.ToString()));
+      });
+			Console.WriteLine("I started");
+		}
+		
+		public void Stop()
+		{
+			this.StopBase();
+			Console.WriteLine("I stopped");
+		}
+	}
+	```
 3. Api for services (and yeah, it's simmilar to Topshelf, thanks for inspiration, I just couldn't wait for you guys to implement this):
 	```cs
 	ServiceRunner<ExampleService>.Run(config =>

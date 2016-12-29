@@ -32,7 +32,6 @@ namespace PeterKottas.DotNetCore.WindowsService
             try
             {
                 onStart();
-                onStopped();
             }
             catch (Exception)
             {
