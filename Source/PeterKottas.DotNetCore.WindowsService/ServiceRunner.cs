@@ -123,7 +123,7 @@ namespace PeterKottas.DotNetCore.WindowsService
             try
             {
                 runAction(hostConfiguration);
-                innerConfig.Service = innerConfig.ServiceFactory();
+                innerConfig.Service = innerConfig.ServiceFactory(innerConfig.ExtraArguments);
                 ConfigureService(innerConfig);
                 return 0;
             }

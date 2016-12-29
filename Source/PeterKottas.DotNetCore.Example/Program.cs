@@ -15,7 +15,7 @@ namespace PeterKottas.DotNetCore.Example
                 var name = config.GetDefaultName();
                 config.Service(serviceConfig =>
                 {
-                    serviceConfig.ServiceFactory(() =>
+                    serviceConfig.ServiceFactory((extraArguments) =>
                     {
                         return new ExampleServiceTimer();
                     });

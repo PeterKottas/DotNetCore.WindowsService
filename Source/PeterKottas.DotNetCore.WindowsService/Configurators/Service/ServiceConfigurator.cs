@@ -12,7 +12,7 @@ namespace PeterKottas.DotNetCore.WindowsService.Configurators.Service
             this.config = config;
         }
 
-        public void ServiceFactory(Func<SERVICE> serviceFactory)
+        public void ServiceFactory(Func<List<string>, SERVICE> serviceFactory)
         {
             config.ServiceFactory = serviceFactory;
         }

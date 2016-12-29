@@ -31,7 +31,7 @@ namespace PeterKottas.DotNetCore.WindowsService
 
         public SERVICE Service { get; set; }
 
-        public Func<SERVICE> ServiceFactory { get; set; }
+        public Func<List<string>, SERVICE> ServiceFactory { get; set; }
 
         public Action<SERVICE, List<string>> OnServiceStart { get; set; }
 
