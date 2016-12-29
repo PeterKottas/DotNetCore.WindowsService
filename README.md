@@ -55,13 +55,13 @@ Using nuget:
 		{
 			this.StartBase();
 			Timers.Start("Poller", 1000, () =>
-      {
-        Console.WriteLine("Polling at {0}\n", DateTime.Now.ToString("o")));
-      },
+			{
+				Console.WriteLine("Polling at {0}\n", DateTime.Now.ToString("o")));
+			},
 			(e) =>
-      {
-        Console.WriteLine("Exception while polling: {0}\n", e.ToString()));
-      });
+			{
+				Console.WriteLine("Exception while polling: {0}\n", e.ToString()));
+			});
 			Console.WriteLine("I started");
 		}
 		
