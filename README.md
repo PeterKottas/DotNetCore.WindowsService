@@ -132,3 +132,7 @@ Using nuget:
 ## License
 
 MIT 
+
+## Credit
+
+Huge thanks goes to @dasMulli the guy behind a useful [lib](https://github.com/dasMulli/dotnet-win32-service) which is one of the dependecies for this library.
