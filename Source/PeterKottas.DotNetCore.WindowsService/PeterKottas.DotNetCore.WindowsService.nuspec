@@ -3,7 +3,7 @@
   <metadata>
     <id>PeterKottas.DotNetCore.WindowsService</id>
     <title>PeterKottas.DotNetCore.WindowsService</title>
-    <version>1.0.5</version>
+    <version>1.0.7</version>
     <authors>Peter Kottas</authors>
     <description>Easiest to use library that allows one to host .net core as windows services there is.</description>
     <summary>.NET Core Windows service</summary>
@@ -17,7 +17,7 @@
       <dependency id="System.ServiceProcess.ServiceController" version="4.3.0" />
     </dependencies>
   </metadata>
-	<files>
+  <files>
     <file src="bin\Release\netcoreapp1.1\*.dll" target="lib\netcoreapp1.1" />
   </files>
 </package>

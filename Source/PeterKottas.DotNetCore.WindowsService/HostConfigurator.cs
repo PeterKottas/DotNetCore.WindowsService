@@ -15,25 +15,25 @@ namespace PeterKottas.DotNetCore.WindowsService
             this.innerConfig = innerConfig;
         }
 
-        public void SetName(string serviceName)
+        public void SetName(string serviceName, bool force = false)
         {
-            if (string.IsNullOrEmpty(innerConfig.Name))
+            if (string.IsNullOrEmpty(innerConfig.Name) || force)
             {
                 innerConfig.Name = serviceName;
             }
         }
 
-        public void SetDisplayName(string displayName)
+        public void SetDisplayName(string displayName, bool force = false)
         {
-            if (string.IsNullOrEmpty(innerConfig.DisplayName))
+            if (string.IsNullOrEmpty(innerConfig.DisplayName) || force)
             {
                 innerConfig.DisplayName = displayName;
             }
         }
 
-        public void SetDescription(string description)
+        public void SetDescription(string description, bool force = false)
         {
-            if (string.IsNullOrEmpty(innerConfig.Description))
+            if (string.IsNullOrEmpty(innerConfig.Description) || force)
             {
                 innerConfig.Description = description;
             }
@@ -50,7 +50,7 @@ namespace PeterKottas.DotNetCore.WindowsService
             {
                 var serviceConfig = new ServiceConfigurator<SERVICE>(innerConfig);
                 serviceConfigAction(serviceConfig);
-                if(innerConfig.ServiceFactory==null)
+                if (innerConfig.ServiceFactory == null)
                 {
                     throw new ArgumentException("It's necesarry to configure action that creates the service (ServiceFactory)");
                 }

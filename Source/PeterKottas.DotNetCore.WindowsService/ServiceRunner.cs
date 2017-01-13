@@ -148,6 +148,92 @@ namespace PeterKottas.DotNetCore.WindowsService
             return fullServiceCommand;
         }
 
+        private static void Install(HostConfiguration<SERVICE> config, ServiceController sc)
+        {
+            Win32ServiceCredentials cred = Win32ServiceCredentials.LocalSystem;
+            if (!string.IsNullOrEmpty(config.Username))
+            {
+                cred = new Win32ServiceCredentials(config.Username, config.Password);
+            }
+            try
+            {
+                new Win32ServiceManager().CreateService(
+                    config.Name,
+                    config.DisplayName,
+                    config.Description,
+                    GetServiceCommand(config.ExtraArguments),
+                    cred,
+                    autoStart: true,
+                    startImmediately: true,
+                    errorSeverity: ErrorSeverity.Normal);
+                Console.WriteLine($@"Successfully registered and started service ""{config.Name}"" (""{config.Description}"")");
+            }
+            catch (Exception e)
+            {
+                if (!e.Message.Contains("already exists"))
+                {
+                    throw;
+                }
+                Console.WriteLine($@"Service ""{config.Name}"" (""{config.Description}"") was already installed. Reinstalling...");
+                Reinstall(config, sc);
+            }
+        }
+
+        private static void Uninstall(HostConfiguration<SERVICE> config, ServiceController sc)
+        {
+            try
+            {
+                if (!(sc.Status == ServiceControllerStatus.Stopped || sc.Status == ServiceControllerStatus.StopPending))
+                {
+                    StopService(config, sc);
+                }
+                new Win32ServiceManager().DeleteService(config.Name);
+                Console.WriteLine($@"Successfully unregistered service ""{config.Name}"" (""{config.Description}"")");
+            }
+            catch (Exception e)
+            {
+                if (!e.Message.Contains("does not exist"))
+                {
+                    throw;
+                }
+                Console.WriteLine($@"Service ""{config.Name}"" (""{config.Description}"") does not exist. No action taken.");
+            }
+        }
+
+        private static void StopService(HostConfiguration<SERVICE> config, ServiceController sc)
+        {
+            if (!(sc.Status == ServiceControllerStatus.Stopped | sc.Status == ServiceControllerStatus.StopPending))
+            {
+                sc.Stop();
+                sc.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromMilliseconds(1000));
+                Console.WriteLine($@"Successfully stopped service ""{config.Name}"" (""{config.Description}"")");
+            }
+            else
+            {
+                Console.WriteLine($@"Service ""{config.Name}"" (""{config.Description}"") is already stopped or stop is pending.");
+            }
+        }
+
+        private static void StartService(HostConfiguration<SERVICE> config, ServiceController sc)
+        {
+            if (!(sc.Status == ServiceControllerStatus.StartPending | sc.Status == ServiceControllerStatus.Running))
+            {
+                sc.Start();
+                sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromMilliseconds(1000));
+                Console.WriteLine($@"Successfully started service ""{config.Name}"" (""{config.Description}"")");
+            }
+            else
+            {
+                Console.WriteLine($@"Service ""{config.Name}"" (""{config.Description}"") is already running or start is pending.");
+            }
+        }
+
+        private static void Reinstall(HostConfiguration<SERVICE> config, ServiceController sc)
+        {
+            Uninstall(config, sc);
+            Install(config, sc);
+        }
+
         private static void ConfigureService(HostConfiguration<SERVICE> config)
         {
             using (var sc = new ServiceController(config.Name))
@@ -156,53 +242,10 @@ namespace PeterKottas.DotNetCore.WindowsService
                 switch (config.Action)
                 {
                     case ActionEnum.Install:
-                        Win32ServiceCredentials cred = Win32ServiceCredentials.LocalSystem;
-                        if (!string.IsNullOrEmpty(config.Username))
-                        {
-                            cred = new Win32ServiceCredentials(config.Username, config.Password);
-                        }
-                        try
-                        {
-                            new Win32ServiceManager().CreateService(
-                                config.Name,
-                                config.DisplayName,
-                                config.Description,
-                                GetServiceCommand(config.ExtraArguments),
-                                cred,
-                                autoStart: true,
-                                startImmediately: true,
-                                errorSeverity: ErrorSeverity.Normal);
-                            Console.WriteLine($@"Successfully registered and started service ""{config.Name}"" (""{config.Description}"")");
-                        }
-                        catch (Exception e)
-                        {
-                            if (!e.Message.Contains("already exists"))
-                            {
-                                throw;
-                            }
-                            Console.WriteLine($@"Service ""{config.Name}"" (""{config.Description}"") was already installed");
-                        }
+                        Install(config, sc);
                         break;
                     case ActionEnum.Uninstall:
-                        try
-                        {
-                            if(!(sc.Status==ServiceControllerStatus.Stopped||sc.Status==ServiceControllerStatus.StopPending))
-                            {
-                                sc.Stop();
-                                sc.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromMilliseconds(1000));
-                                Console.WriteLine($@"Successfully stopped service ""{config.Name}"" (""{config.Description}"")");
-                            }
-                            new Win32ServiceManager().DeleteService(config.Name);
-                            Console.WriteLine($@"Successfully unregistered service ""{config.Name}"" (""{config.Description}"")");
-                        }
-                        catch (Exception e)
-                        {
-                            if (!e.Message.Contains("does not exist"))
-                            {
-                                throw;
-                            }
-                            Console.WriteLine($@"Service ""{config.Name}"" (""{config.Description}"") does not exist. No action taken.");
-                        }
+                        Uninstall(config, sc);
                         break;
                     case ActionEnum.Run:
                         var testService = new InnerService(config.Name, () => Start(config), () => Stop(config));
@@ -213,28 +256,10 @@ namespace PeterKottas.DotNetCore.WindowsService
                         Start(config);
                         break;
                     case ActionEnum.Stop:
-                        if (!(sc.Status == ServiceControllerStatus.Stopped | sc.Status==ServiceControllerStatus.StopPending))
-                        {
-                            sc.Stop();
-                            sc.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromMilliseconds(1000));
-                            Console.WriteLine($@"Successfully stopped service ""{config.Name}"" (""{config.Description}"")");
-                        }
-                        else
-                        {
-                            Console.WriteLine($@"Service ""{config.Name}"" (""{config.Description}"") is already stopped or stop is pending.");
-                        }
+                        StopService(config, sc);
                         break;
                     case ActionEnum.Start:
-                        if (!(sc.Status == ServiceControllerStatus.StartPending | sc.Status == ServiceControllerStatus.Running))
-                        {
-                            sc.Start();
-                            sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromMilliseconds(1000));
-                            Console.WriteLine($@"Successfully started service ""{config.Name}"" (""{config.Description}"")");
-                        }
-                        else
-                        {
-                            Console.WriteLine($@"Service ""{config.Name}"" (""{config.Description}"") is already running or start is pending.");
-                        }
+                        StartService(config, sc);
                         break;
                 }
             }
