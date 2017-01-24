@@ -1,5 +1,5 @@
 {
-  "version": "1.0.7",
+  "version": "1.0.8",
 
   "dependencies": {
     "DasMulli.Win32.ServiceUtils": "1.0.1",
