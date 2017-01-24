@@ -1,9 +1,9 @@
 {
-  "version": "1.0.7",
+  "version": "1.0.9",
 
   "dependencies": {
     "DasMulli.Win32.ServiceUtils": "1.0.1",
-    "PeterKottas.DotNetCore.CmdArgParser": "1.0.4",
+    "PeterKottas.DotNetCore.CmdArgParser": "1.0.5",
     "System.ServiceProcess.ServiceController": "4.3.0"
   },
 

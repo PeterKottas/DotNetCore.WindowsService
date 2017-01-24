@@ -5,7 +5,7 @@
   },
 
   "dependencies": {
-    "PeterKottas.DotNetCore.WindowsService": "1.0.0-*"
+    "PeterKottas.DotNetCore.WindowsService": "1.0.8"
   },
 
   "frameworks": {
