@@ -230,6 +230,7 @@ namespace PeterKottas.DotNetCore.WindowsService
 
         private static void Reinstall(HostConfiguration<SERVICE> config, ServiceController sc)
         {
+            StopService(config, sc);
             Uninstall(config, sc);
             Install(config, sc);
         }

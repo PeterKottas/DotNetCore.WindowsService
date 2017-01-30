@@ -44,6 +44,30 @@ namespace PeterKottas.DotNetCore.WindowsService
             return innerConfig.Name;
         }
 
+        public bool IsNameNullOrEmpty
+        {
+            get
+            {
+                return string.IsNullOrEmpty(innerConfig.Name);
+            }
+        }
+
+        public bool IsDescriptionNullOrEmpty
+        {
+            get
+            {
+                return string.IsNullOrEmpty(innerConfig.Description);
+            }
+        }
+
+        public bool IsDisplayNameNullOrEmpty
+        {
+            get
+            {
+                return string.IsNullOrEmpty(innerConfig.DisplayName);
+            }
+        }
+
         public void Service(Action<ServiceConfigurator<SERVICE>> serviceConfigAction)
         {
             try
