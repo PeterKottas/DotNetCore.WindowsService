@@ -38,7 +38,6 @@ namespace PeterKottas.DotNetCore.Example
                     });
                 });
             });
-            Console.ReadKey();
         }
     }
 }

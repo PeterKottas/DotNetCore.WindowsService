@@ -7,6 +7,8 @@ using PeterKottas.DotNetCore.CmdArgParser;
 using System.Collections.Generic;
 using System.Linq;
 using PeterKottas.DotNetCore.WindowsService.Interfaces;
+using Microsoft.Extensions.PlatformAbstractions;
+using System.IO;
 
 namespace PeterKottas.DotNetCore.WindowsService
 {
@@ -123,7 +125,10 @@ namespace PeterKottas.DotNetCore.WindowsService
             try
             {
                 runAction(hostConfiguration);
-                innerConfig.Service = innerConfig.ServiceFactory(innerConfig.ExtraArguments);
+                if (innerConfig.Action == ActionEnum.Run || innerConfig.Action == ActionEnum.RunInteractive)
+                {
+                    innerConfig.Service = innerConfig.ServiceFactory(innerConfig.ExtraArguments);
+                }
                 ConfigureService(innerConfig);
                 return 0;
             }
@@ -137,7 +142,12 @@ namespace PeterKottas.DotNetCore.WindowsService
         private static string GetServiceCommand(List<string> extraArguments)
         {
             var host = Process.GetCurrentProcess().MainModule.FileName;
-
+            if (host.EndsWith("dotnet.exe", StringComparison.OrdinalIgnoreCase))
+            {
+                var appPath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath,
+                    PlatformServices.Default.Application.ApplicationName + ".dll");
+                host = string.Format("{0} {1}", host, appPath);
+            }
             if (!host.EndsWith("dotnet.exe", StringComparison.OrdinalIgnoreCase))
             {
                 //For self-contained apps, skip the dll path
@@ -148,7 +158,7 @@ namespace PeterKottas.DotNetCore.WindowsService
             return fullServiceCommand;
         }
 
-        private static void Install(HostConfiguration<SERVICE> config, ServiceController sc)
+        private static void Install(HostConfiguration<SERVICE> config, ServiceController sc, int counter = 0)
         {
             Win32ServiceCredentials cred = Win32ServiceCredentials.LocalSystem;
             if (!string.IsNullOrEmpty(config.Username))
@@ -170,12 +180,41 @@ namespace PeterKottas.DotNetCore.WindowsService
             }
             catch (Exception e)
             {
-                if (!e.Message.Contains("already exists"))
+                if (e.Message.Contains("already exists"))
+                {
+                    Console.WriteLine($@"Service ""{config.Name}"" (""{config.Description}"") was already installed. Reinstalling...");
+                    Reinstall(config, sc);
+                }
+                else if (e.Message.Contains("The specified service has been marked for deletion"))
+                {
+                    if (counter < 10)
+                    {
+                        counter++;
+                        string suffix = "th";
+                        if(counter==1)
+                        {
+                            suffix = "st";
+                        }
+                        else if(counter ==2)
+                        {
+                            suffix = "nd";
+                        }
+                        else if (counter == 3)
+                        {
+                            suffix = "rd";
+                        }
+                        Console.WriteLine("The specified service has been marked for deletion. Retrying {0}{1} time", counter, suffix);
+                        Install(config, sc, counter);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                else
                 {
                     throw;
                 }
-                Console.WriteLine($@"Service ""{config.Name}"" (""{config.Description}"") was already installed. Reinstalling...");
-                Reinstall(config, sc);
             }
         }
 
