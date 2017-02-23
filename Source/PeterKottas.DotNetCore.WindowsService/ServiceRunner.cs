@@ -189,6 +189,7 @@ namespace PeterKottas.DotNetCore.WindowsService
                 {
                     if (counter < 10)
                     {
+                        System.Threading.Thread.Sleep(500);
                         counter++;
                         string suffix = "th";
                         if(counter==1)
