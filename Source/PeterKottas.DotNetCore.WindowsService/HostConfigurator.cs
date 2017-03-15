@@ -17,7 +17,7 @@ namespace PeterKottas.DotNetCore.WindowsService
 
         public void SetName(string serviceName, bool force = false)
         {
-            if (string.IsNullOrEmpty(innerConfig.Name) || force)
+            if (!string.IsNullOrEmpty(innerConfig.Name) || force)
             {
                 innerConfig.Name = serviceName;
             }
@@ -25,7 +25,7 @@ namespace PeterKottas.DotNetCore.WindowsService
 
         public void SetDisplayName(string displayName, bool force = false)
         {
-            if (string.IsNullOrEmpty(innerConfig.DisplayName) || force)
+            if (!string.IsNullOrEmpty(innerConfig.DisplayName) || force)
             {
                 innerConfig.DisplayName = displayName;
             }
@@ -33,7 +33,7 @@ namespace PeterKottas.DotNetCore.WindowsService
 
         public void SetDescription(string description, bool force = false)
         {
-            if (string.IsNullOrEmpty(innerConfig.Description) || force)
+            if (!string.IsNullOrEmpty(innerConfig.Description) || force)
             {
                 innerConfig.Description = description;
             }
