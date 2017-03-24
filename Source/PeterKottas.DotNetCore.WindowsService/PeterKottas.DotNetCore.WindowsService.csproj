@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <VersionPrefix>1.0.16</VersionPrefix>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+    <AssemblyName>PeterKottas.DotNetCore.WindowsService</AssemblyName>
+    <PackageId>PeterKottas.DotNetCore.WindowsService</PackageId>
+    <PackageTargetFallback>$(PackageTargetFallback);dnxcore50</PackageTargetFallback>
+    <RuntimeFrameworkVersion>1.1.1</RuntimeFrameworkVersion>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <Version>1.0.17</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="DasMulli.Win32.ServiceUtils" Version="1.0.1" />
+    <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
+    <PackageReference Include="PeterKottas.DotNetCore.CmdArgParser" Version="1.0.5" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="4.3.0" />
+  </ItemGroup>
+
+</Project>

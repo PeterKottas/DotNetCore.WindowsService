@@ -146,7 +146,7 @@ namespace PeterKottas.DotNetCore.WindowsService
             {
                 var appPath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath,
                     PlatformServices.Default.Application.ApplicationName + ".dll");
-                host = string.Format("{0} {1}", host, appPath);
+                host = string.Format("{0} \"{1}\"", host, appPath);
             }
             if (!host.EndsWith("dotnet.exe", StringComparison.OrdinalIgnoreCase))
             {
