@@ -43,7 +43,7 @@ namespace PeterKottas.DotNetCore.WindowsService.Base
                         this.OnTimer();
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                 }
 
@@ -54,7 +54,7 @@ namespace PeterKottas.DotNetCore.WindowsService.Base
                         return;
                     }
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                 }
 
