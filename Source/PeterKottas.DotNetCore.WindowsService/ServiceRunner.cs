@@ -302,7 +302,7 @@ namespace PeterKottas.DotNetCore.WindowsService
             }
         }
         
-        private void UsingServiceController(HostConfiguration<SERVICE> config, Action<ServiceController, config> action) 
+        private static void UsingServiceController(HostConfiguration<SERVICE> config, Action<ServiceController, HostConfiguration<SERVICE>> action) 
         {
             using (var sc = new ServiceController(config.Name))
             {
