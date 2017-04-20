@@ -120,6 +120,7 @@ Using nuget:
 11. Run the service with **displayName:YOUR_DISPLAY_NAME** and it setup Display name for the service.
 12. Run the service with **name:YOUR_NAME** and it setup name for the service.
 13. You can find the complete example in PeterKottas.DotNetCore.Example project.
+14. Install the service using powershell: New-Service -Name $serviceName -BinaryPathName "$binPath action:run" -StartupType Automatic
 
 ## Contributing
 
