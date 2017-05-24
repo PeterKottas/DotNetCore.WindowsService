@@ -277,32 +277,36 @@ namespace PeterKottas.DotNetCore.WindowsService
 
         private static void ConfigureService(HostConfiguration<SERVICE> config)
         {
+            switch (config.Action)
+            {
+                case ActionEnum.Install:
+                    UsingServiceController(config, (sc, cfg) => Install(cfg, sc));
+                    break;
+                case ActionEnum.Uninstall:
+                    UsingServiceController(config, (sc, cfg) => Uninstall(cfg, sc));
+                    break;
+                case ActionEnum.Run:
+                    var testService = new InnerService(config.Name, () => Start(config), () => Stop(config));
+                    var serviceHost = new Win32ServiceHost(testService);
+                    serviceHost.Run();
+                    break;
+                case ActionEnum.RunInteractive:
+                    Start(config);
+                    break;
+                case ActionEnum.Stop:
+                    UsingServiceController(config, (sc, cfg) => StopService(cfg, sc));
+                    break;
+                case ActionEnum.Start:
+                    UsingServiceController(config, (sc, cfg) => StartService(cfg, sc));
+                    break;
+            }
+        }
+        
+        private static void UsingServiceController(HostConfiguration<SERVICE> config, Action<ServiceController, HostConfiguration<SERVICE>> action) 
+        {
             using (var sc = new ServiceController(config.Name))
             {
-
-                switch (config.Action)
-                {
-                    case ActionEnum.Install:
-                        Install(config, sc);
-                        break;
-                    case ActionEnum.Uninstall:
-                        Uninstall(config, sc);
-                        break;
-                    case ActionEnum.Run:
-                        var testService = new InnerService(config.Name, () => Start(config), () => Stop(config));
-                        var serviceHost = new Win32ServiceHost(testService);
-                        serviceHost.Run();
-                        break;
-                    case ActionEnum.RunInteractive:
-                        Start(config);
-                        break;
-                    case ActionEnum.Stop:
-                        StopService(config, sc);
-                        break;
-                    case ActionEnum.Start:
-                        StartService(config, sc);
-                        break;
-                }
+                action(sc, config);
             }
         }
 
