@@ -43,8 +43,9 @@ namespace PeterKottas.DotNetCore.WindowsService.Base
                         this.OnTimer();
                     }
                 }
-                catch (Exception)
+                catch (Exception exception)
                 {
+                    this.OnException(exception);
                 }
 
                 try
@@ -54,8 +55,9 @@ namespace PeterKottas.DotNetCore.WindowsService.Base
                         return;
                     }
                 }
-                catch (Exception)
+                catch (Exception exception)
                 {
+                    this.OnException(exception);
                 }
 
             }
