@@ -300,3 +300,4 @@ __pycache__/
 build/
 project.lock.json
 /Source/Hosts/Frontend/wwwroot/dist/vendor-manifest.json
+/.vs

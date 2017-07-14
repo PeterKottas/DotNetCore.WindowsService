@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include=".template.config\template.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PeterKottas.DotNetCore.WindowsService\PeterKottas.DotNetCore.WindowsService.csproj" />
+  </ItemGroup>
+
+</Project>

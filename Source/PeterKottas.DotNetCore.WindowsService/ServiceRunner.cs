@@ -9,6 +9,7 @@ using System.Linq;
 using PeterKottas.DotNetCore.WindowsService.Interfaces;
 using Microsoft.Extensions.PlatformAbstractions;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace PeterKottas.DotNetCore.WindowsService
 {
@@ -127,7 +128,17 @@ namespace PeterKottas.DotNetCore.WindowsService
                 runAction(hostConfiguration);
                 if (innerConfig.Action == ActionEnum.Run || innerConfig.Action == ActionEnum.RunInteractive)
                 {
-                    innerConfig.Service = innerConfig.ServiceFactory(innerConfig.ExtraArguments);
+                    var controller = new MicroServiceController(
+                        () =>
+                        {
+                            var task = Task.Factory.StartNew(() =>
+                            {
+                                UsingServiceController(innerConfig, (sc, cfg) => StopService(cfg, sc));
+                            });
+                            //task.Wait();
+                        }
+                    );
+                    innerConfig.Service = innerConfig.ServiceFactory(innerConfig.ExtraArguments, controller);
                 }
                 ConfigureService(innerConfig);
                 return 0;
@@ -192,11 +203,11 @@ namespace PeterKottas.DotNetCore.WindowsService
                         System.Threading.Thread.Sleep(500);
                         counter++;
                         string suffix = "th";
-                        if(counter==1)
+                        if (counter == 1)
                         {
                             suffix = "st";
                         }
-                        else if(counter ==2)
+                        else if (counter == 2)
                         {
                             suffix = "nd";
                         }
@@ -301,8 +312,8 @@ namespace PeterKottas.DotNetCore.WindowsService
                     break;
             }
         }
-        
-        private static void UsingServiceController(HostConfiguration<SERVICE> config, Action<ServiceController, HostConfiguration<SERVICE>> action) 
+
+        private static void UsingServiceController(HostConfiguration<SERVICE> config, Action<ServiceController, HostConfiguration<SERVICE>> action)
         {
             using (var sc = new ServiceController(config.Name))
             {

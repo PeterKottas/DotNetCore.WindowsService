@@ -7,12 +7,13 @@ using PeterKottas.DotNetCore.WindowsService.Interfaces;
 
 namespace PeterKottas.DotNetCore.WindowsService
 {
-    public class HostConfiguration<SERVICE> where SERVICE: IMicroService
+    public class HostConfiguration<SERVICE> where SERVICE : IMicroService
     {
         public HostConfiguration()
         {
             OnServiceStop = service => { };
-            OnServiceError = e => {
+            OnServiceError = e =>
+            {
                 Console.WriteLine(e.ToString());
             };
         }
@@ -31,7 +32,7 @@ namespace PeterKottas.DotNetCore.WindowsService
 
         public SERVICE Service { get; set; }
 
-        public Func<List<string>, SERVICE> ServiceFactory { get; set; }
+        public Func<List<string>, IMicroServiceController, SERVICE> ServiceFactory { get; set; }
 
         public Action<SERVICE, List<string>> OnServiceStart { get; set; }
 

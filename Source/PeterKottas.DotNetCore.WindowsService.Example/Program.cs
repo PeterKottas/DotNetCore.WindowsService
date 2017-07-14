@@ -1,23 +1,26 @@
-﻿using PeterKottas.DotNetCore.WindowsService;
+﻿using Microsoft.Extensions.PlatformAbstractions;
+using PeterKottas.DotNetCore.WindowsService;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PeterKottas.DotNetCore.Example
+namespace PeterKottas.DotNetCore.WindowsService.Example
 {
     public class Program
     {
         public static void Main(string[] args)
         {
-            ServiceRunner<ExampleServiceTimer>.Run(config =>
+            var fileName = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "log.txt");
+            ServiceRunner<ExampleService>.Run(config =>
             {
                 var name = config.GetDefaultName();
                 config.Service(serviceConfig =>
                 {
-                    serviceConfig.ServiceFactory((extraArguments) =>
+                    serviceConfig.ServiceFactory((extraArguments, controller) =>
                     {
-                        return new ExampleServiceTimer();
+                        return new ExampleService(controller);
                     });
 
                     serviceConfig.OnStart((service, extraParams) =>
@@ -34,6 +37,7 @@ namespace PeterKottas.DotNetCore.Example
 
                     serviceConfig.OnError(e =>
                     {
+                        File.AppendAllText(fileName, $"Exception: {e.ToString()}\n");
                         Console.WriteLine("Service {0} errored with exception : {1}", name, e.Message);
                     });
                 });
