@@ -12,7 +12,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PeterKottas.DotNetCore.Wind
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PeterKottas.DotNetCore.WindowsService.Example", "..\Source\PeterKottas.DotNetCore.WindowsService.Example\PeterKottas.DotNetCore.WindowsService.Example.csproj", "{63C67004-73D7-4D49-8A3F-3CBC6554BB46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PeterKottas.DotNetCore.WindowsService.Template", "..\Source\PeterKottas.DotNetCore.WindowsService.Template\PeterKottas.DotNetCore.WindowsService.Template.csproj", "{E57FD833-A419-424A-951C-9DE8F3DA4D08}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PeterKottas.DotNetCore.WindowsService.MinimalTemplate", "..\Source\Templates\PeterKottas.DotNetCore.WindowsService.MinimalTemplate\PeterKottas.DotNetCore.WindowsService.MinimalTemplate.csproj", "{D5FE4BD5-85F0-42D8-89D7-C8AF272278F3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -28,10 +28,10 @@ Global
 		{63C67004-73D7-4D49-8A3F-3CBC6554BB46}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{63C67004-73D7-4D49-8A3F-3CBC6554BB46}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{63C67004-73D7-4D49-8A3F-3CBC6554BB46}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E57FD833-A419-424A-951C-9DE8F3DA4D08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E57FD833-A419-424A-951C-9DE8F3DA4D08}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E57FD833-A419-424A-951C-9DE8F3DA4D08}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E57FD833-A419-424A-951C-9DE8F3DA4D08}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5FE4BD5-85F0-42D8-89D7-C8AF272278F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5FE4BD5-85F0-42D8-89D7-C8AF272278F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5FE4BD5-85F0-42D8-89D7-C8AF272278F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5FE4BD5-85F0-42D8-89D7-C8AF272278F3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

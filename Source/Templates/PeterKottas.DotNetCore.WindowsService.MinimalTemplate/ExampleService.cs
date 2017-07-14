@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace PeterKottas.DotNetCore.WindowsService.Template
+namespace PeterKottas.DotNetCore.WindowsService.MinimalTemplate
 {
     public class ExampleService : IMicroService
     {

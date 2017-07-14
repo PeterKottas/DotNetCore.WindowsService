@@ -1,8 +1,9 @@
 ﻿using Microsoft.Extensions.PlatformAbstractions;
+using PeterKottas.DotNetCore.WindowsService;
 using System;
 using System.IO;
 
-namespace PeterKottas.DotNetCore.WindowsService.Template
+namespace PeterKottas.DotNetCore.WindowsService.MinimalTemplate
 {
     class Program
     {

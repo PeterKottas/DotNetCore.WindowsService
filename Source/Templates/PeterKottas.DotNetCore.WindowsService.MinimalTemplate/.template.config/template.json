@@ -1,0 +1,12 @@
+﻿{
+  "author": "Peter Kottas",
+  "classifications": [ "Microservices" ],
+  "name": "Microservice - minimal",
+  "identity": "PeterKottas.DotNetCore.WindowsService.MinimalTemplate",
+  "tags": {
+    "language": "C#" 
+  },
+  "shortName": "mcrsvc-min",
+  "guids": [ "dc46e9be-12b0-43c5-ac94-5c7019d59196" ],
+  "sourceName": "PeterKottas.DotNetCore.WindowsService.MinimalTemplate"
+}
