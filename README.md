@@ -4,7 +4,7 @@ Simple library that allows one to host dot net core application as windows servi
 
 ## Important note 
 
-This library was created to enable one to host CONSOLE dot net core applications. If you want to host a WEBSITE as a service, you're better of following (Hosting website as windows service)[https://docs.microsoft.com/en-us/aspnet/core/hosting/windows-service]
+This library was created to enable one to host CONSOLE dot net core applications. If you want to host a WEBSITE as a service, you're better of following https://docs.microsoft.com/en-us/aspnet/core/hosting/windows-service
 
 ## Installation
 
