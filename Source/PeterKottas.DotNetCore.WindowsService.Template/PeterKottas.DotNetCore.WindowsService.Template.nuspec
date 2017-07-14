@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
     <id>PeterKottas.DotNetCore.WindowsService.Template</id>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <description>Minimal template for dot net core microservice.</description>
     <authors>Peter Kottas</authors>
     <summary>.NET Core Windows service template</summary>

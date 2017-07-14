@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PeterKottas.DotNetCore.WindowsService\PeterKottas.DotNetCore.WindowsService.csproj" />
+    <PackageReference Include="PeterKottas.DotNetCore.WindowsService" Version="1.0.20" />
   </ItemGroup>
 
 </Project>
