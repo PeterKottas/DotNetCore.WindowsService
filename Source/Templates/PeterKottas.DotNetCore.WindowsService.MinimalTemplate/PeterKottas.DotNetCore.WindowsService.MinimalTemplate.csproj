@@ -6,10 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include=".template.config\template.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="PeterKottas.DotNetCore.WindowsService" Version="1.0.20" />
   </ItemGroup>
 
