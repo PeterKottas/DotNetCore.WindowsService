@@ -15,7 +15,7 @@ Using nuget:
 
 Easiest way to start is using a brand new template. Just do :
 ```
-dotnet new -i PeterKottas.DotNetCore.WindowsService::*
+dotnet new -i PeterKottas.DotNetCore.WindowsService.Template::*
 ```
 then follow up with this
 ```
