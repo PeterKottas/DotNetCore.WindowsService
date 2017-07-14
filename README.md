@@ -15,15 +15,19 @@ Using nuget:
 
 Easiest way to start is using a brand new template. Just do :
 ```
-dotnet new -i PeterKottas.DotNetCore.WindowsService.Template::*
+dotnet new -i PeterKottas.DotNetCore.WindowsService.Templates::*
 ```
-then follow up with this
+This will add one template at the moment.
+
+Follow up with this
 ```
 mkdir NameOfYourProject
 cd NameOfYourProject
-dotnet new mcrsvc
+dotnet new mcrsvc-min
 ```
 This will create a sample project for you. Next chapter explains its features in more details especially points 6 onwards if you used the template.
+
+Community, feel encouraged to add more templates if you find something missing/usefull. I'll be more than happy to add these. Just copy the project in https://github.com/PeterKottas/DotNetCore.WindowsService/tree/master/Source/Templates/PeterKottas.DotNetCore.WindowsService.MinimalTemplate and follow instructions in https://github.com/dotnet/templating if you need more specific behvaiour.
 
 ## Usage
 
