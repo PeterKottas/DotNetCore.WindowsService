@@ -2,36 +2,33 @@
 
 Simple library that allows one to host dot net core application as windows services. Perfect solution to power micro-services architecture.
 
+## Important note 
+
+This library was created to enable one to host CONSOLE dot net core applications. If you want to host a WEBSITE as a service, you're better of following (Hosting website as windows service)[https://docs.microsoft.com/en-us/aspnet/core/hosting/windows-service]
+
 ## Installation
 
 Using nuget:
 **Install-Package PeterKottas.DotNetCore.WindowsService**
 
+## Quick start
+
+Easiest way to start is using a brand new template. Just do :
+```
+dotnet new -i PeterKottas.DotNetCore.WindowsService::*
+```
+then follow up with this
+```
+mkdir NameOfYourProject
+cd NameOfYourProject
+dotnet new mcrsvc
+```
+This will create a sample project for you. Next chapter explains its features in more details
+
 ## Usage
 
-1. Create .NETCore console app with a project.json simmilar to this:
+1. Create .NETCore console app.
 	
-	```cs
-	{
-		"version": "1.0.0-*",
-		"buildOptions": {
-			"emitEntryPoint": true
-		},
-		"frameworks": {
-			"netcoreapp1.1": {
-				"dependencies": {
-					"Microsoft.NETCore.App": {
-						"version": "1.1.0"//Optionally add "type": "platform" if you don't want self contained app
-					}
-				},
-				"imports": "dnxcore50"
-			}
-		},
-		"runtimes": { //Optionally add runtimes that you want to support
-			"win81-x64": {}
-		}
-	}
-	```
 2. Create your first service, something like this:
 	```cs
 	public class ExampleService : IMicroService
