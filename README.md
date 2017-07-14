@@ -23,7 +23,7 @@ mkdir NameOfYourProject
 cd NameOfYourProject
 dotnet new mcrsvc
 ```
-This will create a sample project for you. Next chapter explains its features in more details
+This will create a sample project for you. Next chapter explains its features in more details especially points 6 onwards if you used the template.
 
 ## Usage
 
