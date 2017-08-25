@@ -1,15 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp1.1;netcoreapp1.0</TargetFrameworks>
-    <OutputType>Library</OutputType>
+    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="DasMulli.Win32.ServiceUtils" Version="1.0.1" />
     <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
     <PackageReference Include="PeterKottas.DotNetCore.CmdArgParser" Version="1.0.5" />
-    <PackageReference Include="System.ServiceProcess.ServiceController" Version="4.3.0" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="4.4.0" />
   </ItemGroup>
 
 </Project>
