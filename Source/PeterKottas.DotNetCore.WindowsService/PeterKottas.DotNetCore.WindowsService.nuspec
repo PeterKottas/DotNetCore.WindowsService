@@ -3,7 +3,7 @@
   <metadata>
     <id>PeterKottas.DotNetCore.WindowsService</id>
     <title>PeterKottas.DotNetCore.WindowsService</title>
-    <version>1.0.20</version>
+    <version>2.0.0</version>
     <authors>Peter Kottas</authors>
     <description>Easiest to use library that allows one to host .net core as windows services there is.</description>
     <summary>.NET Core Windows service</summary>
@@ -14,11 +14,12 @@
     <dependencies>
       <dependency id="DasMulli.Win32.ServiceUtils" version="1.0.1" />
       <dependency id="PeterKottas.DotNetCore.CmdArgParser" version="1.0.5" />
-      <dependency id="System.ServiceProcess.ServiceController" version="4.3.0" />
+      <dependency id="System.ServiceProcess.ServiceController" version="4.4.0" />
       <dependency id="Microsoft.Extensions.PlatformAbstractions" version="1.1.0" />
     </dependencies>
   </metadata>
   <files>
+    <file src="bin\Release\netcoreapp2.0\*.dll" target="lib\netcoreapp2.0" />
     <file src="bin\Release\netcoreapp1.1\*.dll" target="lib\netcoreapp1.1" />
     <file src="bin\Release\netcoreapp1.0\*.dll" target="lib\netcoreapp1.0" />
   </files>
