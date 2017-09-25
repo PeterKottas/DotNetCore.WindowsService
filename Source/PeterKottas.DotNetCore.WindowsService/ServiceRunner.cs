@@ -269,6 +269,7 @@ namespace PeterKottas.DotNetCore.WindowsService
         {
             if (!(sc.Status == ServiceControllerStatus.StartPending | sc.Status == ServiceControllerStatus.Running))
             {
+                Directory.SetCurrentDirectory(PlatformServices.Default.Application.ApplicationBasePath);
                 sc.Start();
                 sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromMilliseconds(1000));
                 Console.WriteLine($@"Successfully started service ""{config.Name}"" (""{config.Description}"")");
