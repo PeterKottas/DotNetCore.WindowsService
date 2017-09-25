@@ -17,6 +17,8 @@ namespace PeterKottas.DotNetCore.WindowsService
     {
         public static int Run(Action<HostConfigurator<SERVICE>> runAction)
         {
+            Directory.SetCurrentDirectory(PlatformServices.Default.Application.ApplicationBasePath);
+        
             var innerConfig = new HostConfiguration<SERVICE>();
             innerConfig.Action = ActionEnum.RunInteractive;
             innerConfig.Name = typeof(SERVICE).FullName;
@@ -269,7 +271,6 @@ namespace PeterKottas.DotNetCore.WindowsService
         {
             if (!(sc.Status == ServiceControllerStatus.StartPending | sc.Status == ServiceControllerStatus.Running))
             {
-                Directory.SetCurrentDirectory(PlatformServices.Default.Application.ApplicationBasePath);
                 sc.Start();
                 sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromMilliseconds(1000));
                 Console.WriteLine($@"Successfully started service ""{config.Name}"" (""{config.Description}"")");
