@@ -17,6 +17,8 @@ namespace PeterKottas.DotNetCore.WindowsService
     {
         public static int Run(Action<HostConfigurator<SERVICE>> runAction)
         {
+            Directory.SetCurrentDirectory(PlatformServices.Default.Application.ApplicationBasePath);
+        
             var innerConfig = new HostConfiguration<SERVICE>();
             innerConfig.Action = ActionEnum.RunInteractive;
             innerConfig.Name = typeof(SERVICE).FullName;
