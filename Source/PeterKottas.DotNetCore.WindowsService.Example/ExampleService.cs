@@ -6,20 +6,20 @@ using System.Timers;
 
 namespace PeterKottas.DotNetCore.WindowsService.Example
 {
-	public class ExampleService : IMicroService
+    public class ExampleService : IMicroService
     {
-        private IMicroServiceController _controller;
+        private IMicroServiceController controller;
 
-		private Timer _timer = new Timer(1000);
+		private Timer timer = new Timer(1000);
 
         public ExampleService()
         {
-            _controller = null;
+            controller = null;
         }
 
         public ExampleService(IMicroServiceController controller)
         {
-            _controller = controller;
+            this.controller = controller;
         }
 
         private string fileName = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "log.txt");
@@ -29,8 +29,12 @@ namespace PeterKottas.DotNetCore.WindowsService.Example
             Console.WriteLine(fileName);
             File.AppendAllText(fileName, "Started\n");
 
-			_timer.Elapsed += _timer_Elapsed;
-			_timer.Start();
+            /**
+             * A timer is a simple example. But this could easily 
+             * be a port or messaging queue client
+             */ 
+			timer.Elapsed += _timer_Elapsed;
+			timer.Start();
         }
 
 		private void _timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -40,7 +44,7 @@ namespace PeterKottas.DotNetCore.WindowsService.Example
 
 		public void Stop()
         {
-			_timer.Stop();
+			timer.Stop();
             File.AppendAllText(fileName, "Stopped\n");
             Console.WriteLine("I stopped");
         }
