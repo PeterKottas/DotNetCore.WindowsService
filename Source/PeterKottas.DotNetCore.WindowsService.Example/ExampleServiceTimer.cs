@@ -1,13 +1,12 @@
-﻿using System;
-using System.IO;
-using System.Diagnostics;
+﻿using Microsoft.Extensions.PlatformAbstractions;
 using PeterKottas.DotNetCore.WindowsService.Base;
 using PeterKottas.DotNetCore.WindowsService.Interfaces;
-using Microsoft.Extensions.PlatformAbstractions;
+using System;
+using System.IO;
 
 namespace PeterKottas.DotNetCore.WindowsService.Example
 {
-    public class ExampleServiceTimer : MicroService, IMicroService
+	public class ExampleServiceTimer : MicroService, IMicroService
     {
         private IMicroServiceController controller;
 
