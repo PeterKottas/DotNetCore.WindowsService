@@ -1,16 +1,16 @@
-﻿using PeterKottas.DotNetCore.WindowsService.Interfaces;
+﻿using Microsoft.Extensions.PlatformAbstractions;
+using PeterKottas.DotNetCore.WindowsService.Interfaces;
 using System;
 using System.IO;
-using System.Diagnostics;
-using Microsoft.Extensions.PlatformAbstractions;
-using System.ServiceProcess;
-using System.Threading.Tasks;
+using System.Timers;
 
 namespace PeterKottas.DotNetCore.WindowsService.Example
 {
     public class ExampleService : IMicroService
     {
         private IMicroServiceController controller;
+
+		private Timer timer = new Timer(1000);
 
         public ExampleService()
         {
@@ -28,14 +28,23 @@ namespace PeterKottas.DotNetCore.WindowsService.Example
             Console.WriteLine("I started");
             Console.WriteLine(fileName);
             File.AppendAllText(fileName, "Started\n");
-            if (controller != null)
-            {
-                controller.Stop();
-            }
+
+            /**
+             * A timer is a simple example. But this could easily 
+             * be a port or messaging queue client
+             */ 
+			timer.Elapsed += _timer_Elapsed;
+			timer.Start();
         }
 
-        public void Stop()
+		private void _timer_Elapsed(object sender, ElapsedEventArgs e)
+		{
+			File.AppendAllText(fileName, string.Format("Polling at {0}\n", DateTime.Now.ToString("o")));
+		}
+
+		public void Stop()
         {
+			timer.Stop();
             File.AppendAllText(fileName, "Stopped\n");
             Console.WriteLine("I stopped");
         }

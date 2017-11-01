@@ -1,14 +1,10 @@
 ﻿using Microsoft.Extensions.PlatformAbstractions;
-using PeterKottas.DotNetCore.WindowsService;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PeterKottas.DotNetCore.WindowsService.Example
 {
-    public class Program
+	public class Program
     {
         public static void Main(string[] args)
         {

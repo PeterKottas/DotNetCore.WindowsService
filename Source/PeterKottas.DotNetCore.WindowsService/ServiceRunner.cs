@@ -128,22 +128,38 @@ namespace PeterKottas.DotNetCore.WindowsService
             try
             {
                 runAction(hostConfiguration);
-                if (innerConfig.Action == ActionEnum.Run || innerConfig.Action == ActionEnum.RunInteractive)
-                {
-                    var controller = new MicroServiceController(
-                        () =>
-                        {
-                            var task = Task.Factory.StartNew(() =>
-                            {
-                                UsingServiceController(innerConfig, (sc, cfg) => StopService(cfg, sc));
-                            });
-                            //task.Wait();
-                        }
-                    );
-                    innerConfig.Service = innerConfig.ServiceFactory(innerConfig.ExtraArguments, controller);
-                }
-                ConfigureService(innerConfig);
-                return 0;
+                if (innerConfig.Action == ActionEnum.Run)
+                    innerConfig.Service = innerConfig.ServiceFactory(innerConfig.ExtraArguments,
+						new MicroServiceController(() => 
+						{
+							var task = Task.Factory.StartNew(() =>
+							{
+								UsingServiceController(innerConfig, (sc, cfg) => StopService(cfg, sc));
+							});
+						}
+					));
+				else if (innerConfig.Action == ActionEnum.RunInteractive)
+				{
+					var consoleService = new InnerService(innerConfig.Name, () => Start(innerConfig), () => Stop(innerConfig));
+					var consoleHost = new ConsoleServiceHost<SERVICE>(consoleService, innerConfig);
+
+					innerConfig.Service = innerConfig.ServiceFactory(innerConfig.ExtraArguments,
+						new MicroServiceController(() =>
+						{
+							var task = Task.Factory.StartNew(() =>
+							{
+								consoleHost.StopService();
+							});
+						}
+					));
+
+					// Return the console host run result, so we get some idea what failed if result is not OK
+					return (int)consoleHost.Run();
+				}
+
+				ConfigureService(innerConfig);
+
+				return 0;
             }
             catch (Exception e)
             {
@@ -304,7 +320,6 @@ namespace PeterKottas.DotNetCore.WindowsService
                     serviceHost.Run();
                     break;
                 case ActionEnum.RunInteractive:
-                    Start(config);
                     break;
                 case ActionEnum.Stop:
                     UsingServiceController(config, (sc, cfg) => StopService(cfg, sc));
