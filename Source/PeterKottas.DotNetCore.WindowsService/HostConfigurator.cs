@@ -68,6 +68,22 @@ namespace PeterKottas.DotNetCore.WindowsService
             }
         }
 
+        public void AddExtraArguments(string arg)
+        {
+            if (!string.IsNullOrEmpty(arg))
+            {
+                innerConfig.ExtraArguments.Add(arg);
+            }
+        }
+
+        public void AddExtraArguments(string[] args)
+        {
+            if (args.Length >= 1)
+            {
+                innerConfig.ExtraArguments.AddRange(args);
+            }
+        }
+
         public void Service(Action<ServiceConfigurator<SERVICE>> serviceConfigAction)
         {
             try
