@@ -39,7 +39,7 @@ namespace PeterKottas.DotNetCore.WindowsService
         public Action<SERVICE> OnServiceStop { get; set; }
 
         public Action<Exception> OnServiceError { get; set; }
-
+        
         public List<string> ExtraArguments { get; set; }
     }
 }
