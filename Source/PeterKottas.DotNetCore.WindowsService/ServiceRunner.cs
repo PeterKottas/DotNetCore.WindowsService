@@ -81,6 +81,9 @@ namespace PeterKottas.DotNetCore.WindowsService
                             case "install":
                                 innerConfig.Action = ActionEnum.Install;
                                 break;
+                            case "delayedinstall":
+                                innerConfig.Action = ActionEnum.DelayedInstall;
+                                break;
                             case "start":
                                 innerConfig.Action = ActionEnum.Start;
                                 break;
@@ -232,6 +235,67 @@ namespace PeterKottas.DotNetCore.WindowsService
             }
         }
 
+        private static void DelayedInstall(HostConfiguration<SERVICE> config, ServiceController sc, int counter = 0)
+        {
+            Win32ServiceCredentials cred = Win32ServiceCredentials.LocalSystem;
+            if (!string.IsNullOrEmpty(config.Username))
+            {
+                cred = new Win32ServiceCredentials(config.Username, config.Password);
+            }
+            try
+            {
+                new Win32ServiceManager().CreateService(
+                    config.Name,
+                    config.DisplayName,
+                    config.Description,
+                    GetServiceCommand(config.ExtraArguments),
+                    cred,
+                    autoStart: false,
+                    startImmediately: false,
+                    errorSeverity: ErrorSeverity.Normal);
+                Console.WriteLine($@"Successfully registered service ""{config.Name}"" (""{config.Description}"")");
+            }
+            catch (Exception e)
+            {
+                if (e.Message.Contains("already exists"))
+                {
+                    Console.WriteLine($@"Service ""{config.Name}"" (""{config.Description}"") was already installed. Reinstalling...");
+                    Reinstall(config, sc);
+                }
+                else if (e.Message.Contains("The specified service has been marked for deletion"))
+                {
+                    if (counter < 10)
+                    {
+                        System.Threading.Thread.Sleep(500);
+                        counter++;
+                        string suffix = "th";
+                        if (counter == 1)
+                        {
+                            suffix = "st";
+                        }
+                        else if (counter == 2)
+                        {
+                            suffix = "nd";
+                        }
+                        else if (counter == 3)
+                        {
+                            suffix = "rd";
+                        }
+                        Console.WriteLine("The specified service has been marked for deletion. Retrying {0}{1} time", counter, suffix);
+                        Install(config, sc, counter);
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
         private static void Uninstall(HostConfiguration<SERVICE> config, ServiceController sc)
         {
             try
@@ -294,6 +358,9 @@ namespace PeterKottas.DotNetCore.WindowsService
             {
                 case ActionEnum.Install:
                     UsingServiceController(config, (sc, cfg) => Install(cfg, sc));
+                    break;
+                case ActionEnum.DelayedInstall:
+                    UsingServiceController(config, (sc, cfg) => DelayedInstall(cfg, sc));
                     break;
                 case ActionEnum.Uninstall:
                     UsingServiceController(config, (sc, cfg) => Uninstall(cfg, sc));

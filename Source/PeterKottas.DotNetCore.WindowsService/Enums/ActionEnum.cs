@@ -9,6 +9,7 @@ namespace PeterKottas.DotNetCore.WindowsService.Enums
     {
         Install,
         Uninstall,
+        DelayedInstall,
         Run,
         RunInteractive,
         Stop,
