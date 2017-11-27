@@ -215,7 +215,7 @@ namespace PeterKottas.DotNetCore.WindowsService
                     GetServiceCommand(config.ExtraArguments),
                     cred,
                     autoStart: true,
-                    startImmediately: config.StartImmediately ?? true,
+                    startImmediately: config.StartImmediately,
                     errorSeverity: ErrorSeverity.Normal);
                 Console.WriteLine($@"Successfully registered and started service ""{config.Name}"" (""{config.Description}"")");
             }
