@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using PeterKottas.DotNetCore.WindowsService.Enums;
 using PeterKottas.DotNetCore.WindowsService.Interfaces;
+using DasMulli.Win32.ServiceUtils;
 
 namespace PeterKottas.DotNetCore.WindowsService
 {
@@ -30,7 +31,9 @@ namespace PeterKottas.DotNetCore.WindowsService
 
         public string DisplayName { get; set; }
 
-        public bool StartImmediately { get; set; }
+        public bool StartImmediately { get; set; } = true;
+
+        public Win32ServiceCredentials DefaultCred { get; set; } = Win32ServiceCredentials.LocalSystem;
 
         public SERVICE Service { get; set; }
 

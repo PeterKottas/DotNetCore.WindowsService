@@ -117,11 +117,13 @@ Community, feel encouraged to add more templates if you find something missing/u
 8. Run the service with **action:start** and it will start the service.
 9. Run the service with **action:stop** and it will stop the service.
 10. Run the service with **username:YOUR_USERNAME**, **password:YOUR_PASSWORD** and **action:install** which installs it for the given account.
-11. Run the service with **description:YOUR_DESCRIPTION** and it setup description for the service.
-11. Run the service with **displayName:YOUR_DISPLAY_NAME** and it setup Display name for the service.
-12. Run the service with **name:YOUR_NAME** and it setup name for the service.
-13. You can find the complete example in PeterKottas.DotNetCore.Example project.
-14. Install the service using powershell: New-Service -Name $serviceName -BinaryPathName "$binPath action:run" -StartupType Automatic
+11. Run the service with **built-in-account:(NetworkService|LocalService|LocalSystem)** and **action:install** which installs it for the given built in account. Defaults to **LocalSystem**.
+12. Run the service with **description:YOUR_DESCRIPTION** and it setup description for the service.
+13. Run the service with **displayName:YOUR_DISPLAY_NAME** and it setup Display name for the service.
+14. Run the service with **name:YOUR_NAME** and it setup name for the service.
+15. Run the service with **start-immediately:(true|false)** to start service immediately after install. Defaults to **true**.
+16. You can find the complete example in PeterKottas.DotNetCore.Example project.
+17. Install the service using powershell: New-Service -Name $serviceName -BinaryPathName "$binPath action:run" -StartupType Automatic
 
 ## Contributing
 

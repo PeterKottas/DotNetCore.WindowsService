@@ -45,7 +45,31 @@ namespace PeterKottas.DotNetCore.WindowsService
                 });
                 config.AddParameter(new CmdArgParam()
                 {
-                    Key = "startimmediately",
+                    Key = "built-in-account",
+                    Description = "Password for the service account",
+                    Value = val =>
+                    {
+                        switch (val.ToLower())
+                        {
+                            case "localsystem":
+                                innerConfig.DefaultCred = Win32ServiceCredentials.LocalSystem;
+                                break;
+                            case "localservice":
+                                innerConfig.DefaultCred = Win32ServiceCredentials.LocalService;
+                                break;
+                            case "networkservice":
+                                innerConfig.DefaultCred = Win32ServiceCredentials.NetworkService;
+                                break;
+                            default:
+                                innerConfig.DefaultCred = Win32ServiceCredentials.LocalSystem;
+                                break;
+                        }
+
+                    }
+                });
+                config.AddParameter(new CmdArgParam()
+                {
+                    Key = "start-immediately",
                     Description = "Start the service immediately when installing.",
                     Value = val =>
                     {
@@ -201,7 +225,7 @@ namespace PeterKottas.DotNetCore.WindowsService
 
         private static void Install(HostConfiguration<SERVICE> config, ServiceController sc, int counter = 0)
         {
-            Win32ServiceCredentials cred = Win32ServiceCredentials.LocalSystem;
+            Win32ServiceCredentials cred = config.DefaultCred;
             if (!string.IsNullOrEmpty(config.Username))
             {
                 cred = new Win32ServiceCredentials(config.Username, config.Password);
