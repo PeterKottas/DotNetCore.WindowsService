@@ -30,6 +30,8 @@ namespace PeterKottas.DotNetCore.WindowsService
 
         public string DisplayName { get; set; }
 
+        public bool StartImmediately { get; set; }
+
         public SERVICE Service { get; set; }
 
         public Func<List<string>, IMicroServiceController, SERVICE> ServiceFactory { get; set; }

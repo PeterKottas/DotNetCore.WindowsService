@@ -18,7 +18,7 @@ namespace PeterKottas.DotNetCore.WindowsService
         public static int Run(Action<HostConfigurator<SERVICE>> runAction)
         {
             Directory.SetCurrentDirectory(PlatformServices.Default.Application.ApplicationBasePath);
-        
+
             var innerConfig = new HostConfiguration<SERVICE>();
             innerConfig.Action = ActionEnum.RunInteractive;
             innerConfig.Name = typeof(SERVICE).FullName;
@@ -41,6 +41,18 @@ namespace PeterKottas.DotNetCore.WindowsService
                     Value = val =>
                     {
                         innerConfig.Password = val;
+                    }
+                });
+                config.AddParameter(new CmdArgParam()
+                {
+                    Key = "startimmediately",
+                    Description = "Start the service immediately when installing.",
+                    Value = val =>
+                    {
+                        if (bool.TryParse(val, out var startImmediately))
+                        {
+                            innerConfig.StartImmediately = startImmediately;
+                        }
                     }
                 });
                 config.AddParameter(new CmdArgParam()
@@ -130,36 +142,36 @@ namespace PeterKottas.DotNetCore.WindowsService
                 runAction(hostConfiguration);
                 if (innerConfig.Action == ActionEnum.Run)
                     innerConfig.Service = innerConfig.ServiceFactory(innerConfig.ExtraArguments,
-						new MicroServiceController(() => 
-						{
-							var task = Task.Factory.StartNew(() =>
-							{
-								UsingServiceController(innerConfig, (sc, cfg) => StopService(cfg, sc));
-							});
-						}
-					));
-				else if (innerConfig.Action == ActionEnum.RunInteractive)
-				{
-					var consoleService = new InnerService(innerConfig.Name, () => Start(innerConfig), () => Stop(innerConfig));
-					var consoleHost = new ConsoleServiceHost<SERVICE>(consoleService, innerConfig);
+                        new MicroServiceController(() =>
+                        {
+                            var task = Task.Factory.StartNew(() =>
+                            {
+                                UsingServiceController(innerConfig, (sc, cfg) => StopService(cfg, sc));
+                            });
+                        }
+                    ));
+                else if (innerConfig.Action == ActionEnum.RunInteractive)
+                {
+                    var consoleService = new InnerService(innerConfig.Name, () => Start(innerConfig), () => Stop(innerConfig));
+                    var consoleHost = new ConsoleServiceHost<SERVICE>(consoleService, innerConfig);
 
-					innerConfig.Service = innerConfig.ServiceFactory(innerConfig.ExtraArguments,
-						new MicroServiceController(() =>
-						{
-							var task = Task.Factory.StartNew(() =>
-							{
-								consoleHost.StopService();
-							});
-						}
-					));
+                    innerConfig.Service = innerConfig.ServiceFactory(innerConfig.ExtraArguments,
+                        new MicroServiceController(() =>
+                        {
+                            var task = Task.Factory.StartNew(() =>
+                            {
+                                consoleHost.StopService();
+                            });
+                        }
+                    ));
 
-					// Return the console host run result, so we get some idea what failed if result is not OK
-					return (int)consoleHost.Run();
-				}
+                    // Return the console host run result, so we get some idea what failed if result is not OK
+                    return (int)consoleHost.Run();
+                }
 
-				ConfigureService(innerConfig);
+                ConfigureService(innerConfig);
 
-				return 0;
+                return 0;
             }
             catch (Exception e)
             {
@@ -203,7 +215,7 @@ namespace PeterKottas.DotNetCore.WindowsService
                     GetServiceCommand(config.ExtraArguments),
                     cred,
                     autoStart: true,
-                    startImmediately: true,
+                    startImmediately: config.StartImmediately,
                     errorSeverity: ErrorSeverity.Normal);
                 Console.WriteLine($@"Successfully registered and started service ""{config.Name}"" (""{config.Description}"")");
             }
