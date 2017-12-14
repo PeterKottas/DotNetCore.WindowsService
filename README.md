@@ -95,6 +95,26 @@ Community, feel encouraged to add more templates if you find something missing/u
 				Console.WriteLine("Service {0} stopped", name);
 				service.Stop();
 			});
+			
+			serviceConfig.OnInstall(service =>
+			{
+				Console.WriteLine("Service {0} installed", name);
+			});
+			
+			serviceConfig.OnUnInstall(service =>
+			{
+				Console.WriteLine("Service {0} uninstalled", name);
+			});
+			
+			serviceConfig.OnPause(service =>
+			{
+				Console.WriteLine("Service {0} paused", name);
+			});
+			
+			serviceConfig.OnContinue(service =>
+			{
+				Console.WriteLine("Service {0} continued", name);
+			});
 
 			serviceConfig.OnError(e =>
 			{
@@ -119,7 +139,7 @@ Community, feel encouraged to add more templates if you find something missing/u
 10. Run the service with **username:YOUR_USERNAME**, **password:YOUR_PASSWORD** and **action:install** which installs it for the given account.
 11. Run the service with **built-in-account:(NetworkService|LocalService|LocalSystem)** and **action:install** which installs it for the given built in account. Defaults to **LocalSystem**.
 12. Run the service with **description:YOUR_DESCRIPTION** and it setup description for the service.
-13. Run the service with **displayName:YOUR_DISPLAY_NAME** and it setup Display name for the service.
+13. Run the service with **display-name:YOUR_DISPLAY_NAME** and it setup Display name for the service.
 14. Run the service with **name:YOUR_NAME** and it setup name for the service.
 15. Run the service with **start-immediately:(true|false)** to start service immediately after install. Defaults to **true**.
 16. You can find the complete example in PeterKottas.DotNetCore.Example project.

@@ -43,6 +43,14 @@ namespace PeterKottas.DotNetCore.WindowsService
 
         public Action<SERVICE> OnServiceStop { get; set; }
 
+        public Action<SERVICE> OnServiceInstall { get; set; }
+
+        public Action<SERVICE> OnServiceUnInstall { get; set; }
+
+        public Action<SERVICE> OnServicePause { get; set; }
+
+        public Action<SERVICE> OnServiceContinue { get; set; }
+
         public Action<Exception> OnServiceError { get; set; }
 
         public List<string> ExtraArguments { get; set; }

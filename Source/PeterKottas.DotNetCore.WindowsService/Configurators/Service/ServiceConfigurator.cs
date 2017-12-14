@@ -31,5 +31,25 @@ namespace PeterKottas.DotNetCore.WindowsService.Configurators.Service
         {
             config.OnServiceError = onError;
         }
+
+        public void OnPause(Action<SERVICE> onPause)
+        {
+            config.OnServicePause = onPause;
+        }
+
+        public void OnInstall(Action<SERVICE> onInstall)
+        {
+            config.OnServiceInstall = onInstall;
+        }
+
+        public void OnUnInstall(Action<SERVICE> onUnInstall)
+        {
+            config.OnServiceUnInstall = onUnInstall;
+        }
+
+        public void OnContinue(Action<SERVICE> onContinue)
+        {
+            config.OnServiceContinue = onContinue;
+        }
     }
 }

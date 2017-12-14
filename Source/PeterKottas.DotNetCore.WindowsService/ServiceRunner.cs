@@ -99,7 +99,7 @@ namespace PeterKottas.DotNetCore.WindowsService
                 });
                 config.AddParameter(new CmdArgParam()
                 {
-                    Key = "displayName",
+                    Key = "display-name",
                     Description = "Service display name",
                     Value = val =>
                     {
@@ -294,6 +294,7 @@ namespace PeterKottas.DotNetCore.WindowsService
                 }
                 new Win32ServiceManager().DeleteService(config.Name);
                 Console.WriteLine($@"Successfully unregistered service ""{config.Name}"" (""{config.Description}"")");
+                config.OnServiceUnInstall?.Invoke(config.Service);
             }
             catch (Exception e)
             {
@@ -312,6 +313,37 @@ namespace PeterKottas.DotNetCore.WindowsService
                 sc.Stop();
                 sc.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromMilliseconds(1000));
                 Console.WriteLine($@"Successfully stopped service ""{config.Name}"" (""{config.Description}"")");
+                config.OnServiceStop?.Invoke(config.Service);
+            }
+            else
+            {
+                Console.WriteLine($@"Service ""{config.Name}"" (""{config.Description}"") is already stopped or stop is pending.");
+            }
+        }
+
+        private static void PauseService(HostConfiguration<SERVICE> config, ServiceController sc)
+        {
+            if (!(sc.Status == ServiceControllerStatus.Paused | sc.Status == ServiceControllerStatus.PausePending))
+            {
+                sc.Pause();
+                sc.WaitForStatus(ServiceControllerStatus.Paused, TimeSpan.FromMilliseconds(1000));
+                Console.WriteLine($@"Successfully paused service ""{config.Name}"" (""{config.Description}"")");
+                config.OnServicePause?.Invoke(config.Service);
+            }
+            else
+            {
+                Console.WriteLine($@"Service ""{config.Name}"" (""{config.Description}"") is already paused or stop is pending.");
+            }
+        }
+
+        private static void ContinueService(HostConfiguration<SERVICE> config, ServiceController sc)
+        {
+            if (!(sc.Status == ServiceControllerStatus.Running | sc.Status == ServiceControllerStatus.ContinuePending))
+            {
+                sc.Continue();
+                sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromMilliseconds(1000));
+                Console.WriteLine($@"Successfully stopped service ""{config.Name}"" (""{config.Description}"")");
+                config.OnServiceContinue?.Invoke(config.Service);
             }
             else
             {
