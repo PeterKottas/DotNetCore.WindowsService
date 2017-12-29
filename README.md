@@ -143,7 +143,7 @@ Community, feel encouraged to add more templates if you find something missing/u
 14. Run the service with **name:YOUR_NAME** and it setup name for the service.
 15. Run the service with **start-immediately:(true|false)** to start service immediately after install. Defaults to **true**.
 16. You can find the complete example in PeterKottas.DotNetCore.Example project.
-17. Install the service using powershell: New-Service -Name $serviceName -BinaryPathName "$binPath action:run" -StartupType Automatic
+17. Install the service using powershell: dotnet.exe $serviceDllPath action:install
 
 ## Contributing
 
