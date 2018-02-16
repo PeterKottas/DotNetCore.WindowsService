@@ -301,3 +301,4 @@ build/
 project.lock.json
 /Source/Hosts/Frontend/wwwroot/dist/vendor-manifest.json
 /.vs
+/Source/PeterKottas.DotNetCore.WindowsService/pack.bat

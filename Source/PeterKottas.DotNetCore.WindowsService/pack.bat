@@ -1,1 +1,0 @@
-nuget pack PeterKottas.DotNetCore.WindowsService.nuspec

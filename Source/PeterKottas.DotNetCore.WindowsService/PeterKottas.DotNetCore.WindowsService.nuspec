@@ -3,7 +3,7 @@
   <metadata>
     <id>PeterKottas.DotNetCore.WindowsService</id>
     <title>PeterKottas.DotNetCore.WindowsService</title>
-    <version>2.0.4</version>
+    <version>2.0.6</version>
     <authors>Peter Kottas</authors>
     <description>Easiest to use library that allows one to host .net core as windows services there is.</description>
     <summary>.NET Core Windows service</summary>
@@ -20,7 +20,6 @@
   </metadata>
   <files>
     <file src="bin\Release\netcoreapp2.0\*.dll" target="lib\netcoreapp2.0" />
-    <file src="bin\Release\netcoreapp1.1\*.dll" target="lib\netcoreapp1.1" />
-    <file src="bin\Release\netcoreapp1.0\*.dll" target="lib\netcoreapp1.0" />
+    <file src="bin\Release\net471\*.dll" target="lib\net471" />
   </files>
 </package>
