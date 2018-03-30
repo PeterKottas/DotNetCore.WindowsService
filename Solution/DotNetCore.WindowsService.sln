@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\.editorconfig = ..\.editorconfig
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PeterKottas.DotNetCore.WindowsService.StandardTemplate", "..\Source\Templates\PeterKottas.DotNetCore.WindowsService.StandardTemplate\PeterKottas.DotNetCore.WindowsService.StandardTemplate.csproj", "{6B26C0CE-CB7C-49FA-92F6-4B13D3881E51}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{D5FE4BD5-85F0-42D8-89D7-C8AF272278F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5FE4BD5-85F0-42D8-89D7-C8AF272278F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5FE4BD5-85F0-42D8-89D7-C8AF272278F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B26C0CE-CB7C-49FA-92F6-4B13D3881E51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B26C0CE-CB7C-49FA-92F6-4B13D3881E51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B26C0CE-CB7C-49FA-92F6-4B13D3881E51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B26C0CE-CB7C-49FA-92F6-4B13D3881E51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

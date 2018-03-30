@@ -23,7 +23,7 @@ Follow up with this
 ```
 mkdir NameOfYourProject
 cd NameOfYourProject
-dotnet new mcrsvc-min
+dotnet new [ mcrsvc-min | mcrsvc-std ]
 ```
 This will create a sample project for you. Next chapter explains its features in more details especially points 6 onwards if you used the template.
 

@@ -1,0 +1,12 @@
+﻿{
+  "author": "Peter Kottas",
+  "classifications": [ "Microservices", "Console", "Boilerplate", "Dependency Injection", "Logging", "Configuration" ],
+  "name": "Microservice - Standard w/ DI, Configuration and Logging Extensions",
+  "identity": "PeterKottas.DotNetCore.WindowsService.StandardTemplate",
+  "tags": {
+    "language": "C#" 
+  },
+  "shortName": "mcrsvc-std",
+  "guids": [ "dc46e9be-12b0-43c5-ac94-5c7019d59196" ],
+  "sourceName": "PeterKottas.DotNetCore.WindowsService.StandardTemplate"
+}
