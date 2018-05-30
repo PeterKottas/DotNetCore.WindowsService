@@ -213,7 +213,7 @@ namespace PeterKottas.DotNetCore.WindowsService
                     PlatformServices.Default.Application.ApplicationName + ".dll");
                 host = string.Format("{0} \"{1}\"", host, appPath);
             }
-            if (!host.EndsWith("dotnet.exe", StringComparison.OrdinalIgnoreCase))
+            else
             {
                 //For self-contained apps, skip the dll path
                 extraArguments = extraArguments.Skip(1).ToList();
