@@ -115,6 +115,11 @@ Community, feel encouraged to add more templates if you find something missing/u
 			{
 				Console.WriteLine("Service {0} continued", name);
 			});
+			
+			serviceConfig.OnShutdown(service =>
+			{
+				Console.WriteLine("Service {0} shutdown", name);
+			});
 
 			serviceConfig.OnError(e =>
 			{
@@ -136,6 +141,8 @@ Community, feel encouraged to add more templates if you find something missing/u
 7. Run the service with **action:uninstall** and it will uninstall the service.
 8. Run the service with **action:start** and it will start the service.
 9. Run the service with **action:stop** and it will stop the service.
+9. Run the service with **action:pause** and it will pause the service.
+9. Run the service with **action:continue** and it will continue the service.
 10. Run the service with **username:YOUR_USERNAME**, **password:YOUR_PASSWORD** and **action:install** which installs it for the given account.
 11. Run the service with **built-in-account:(NetworkService|LocalService|LocalSystem)** and **action:install** which installs it for the given built in account. Defaults to **LocalSystem**.
 12. Run the service with **description:YOUR_DESCRIPTION** and it setup description for the service.
