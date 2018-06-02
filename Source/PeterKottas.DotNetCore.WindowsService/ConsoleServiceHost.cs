@@ -77,7 +77,7 @@ namespace PeterKottas.DotNetCore.WindowsService
 				Console.WriteLine("Stopping the {0} service", _consoleService.ServiceName);
 
 				Task stopTask = Task.Run(() => _consoleService.Stop());
-				if (!stopTask.Wait(TimeSpan.FromMilliseconds(150)))
+				if (!stopTask.Wait(TimeSpan.FromMilliseconds(1500)))
 					throw new Exception("The service failed to stop (returned false).");
 
 				_exitCode = ExitCode.Ok;
