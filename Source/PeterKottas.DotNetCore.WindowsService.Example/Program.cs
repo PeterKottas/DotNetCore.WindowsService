@@ -31,6 +31,12 @@ namespace PeterKottas.DotNetCore.WindowsService.Example
                         service.Stop();
                     });
 
+                    serviceConfig.OnShutdown(service =>
+                    {
+                        Console.WriteLine("Service {0} shutdown", name);
+                        File.AppendAllText(fileName, $"Service {name} shutdown\n");
+                    });
+
                     serviceConfig.OnError(e =>
                     {
                         File.AppendAllText(fileName, $"Exception: {e.ToString()}\n");

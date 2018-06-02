@@ -13,6 +13,7 @@ namespace PeterKottas.DotNetCore.WindowsService
         public HostConfiguration()
         {
             OnServiceStop = service => { };
+            OnServiceShutdown = service => { };
             OnServiceError = e =>
             {
                 Console.WriteLine(e.ToString());
@@ -50,6 +51,8 @@ namespace PeterKottas.DotNetCore.WindowsService
         public Action<SERVICE> OnServicePause { get; set; }
 
         public Action<SERVICE> OnServiceContinue { get; set; }
+
+        public Action<SERVICE> OnServiceShutdown { get; set; }
 
         public Action<Exception> OnServiceError { get; set; }
 

@@ -2,15 +2,15 @@
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp2.0;net471</TargetFrameworks>
-    <Version>2.0.6</Version>
-    <AssemblyVersion>2.0.6.0</AssemblyVersion>
-    <FileVersion>2.0.6.0</FileVersion>
+    <Version>2.0.7</Version>
+    <AssemblyVersion>2.0.7.0</AssemblyVersion>
+    <FileVersion>2.0.7.0</FileVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="DasMulli.Win32.ServiceUtils" Version="1.0.1" />
+    <PackageReference Include="DasMulli.Win32.ServiceUtils" Version="1.2.0" />
     <PackageReference Include="Microsoft.Extensions.PlatformAbstractions" Version="1.1.0" />
     <PackageReference Include="PeterKottas.DotNetCore.CmdArgParser" Version="1.0.5" />
-    <PackageReference Include="System.ServiceProcess.ServiceController" Version="4.4.0" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="4.5.0" />
   </ItemGroup>
 
 </Project>

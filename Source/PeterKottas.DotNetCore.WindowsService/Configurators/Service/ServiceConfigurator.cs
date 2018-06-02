@@ -51,5 +51,10 @@ namespace PeterKottas.DotNetCore.WindowsService.Configurators.Service
         {
             config.OnServiceContinue = onContinue;
         }
+
+        public void OnShutdown(Action<SERVICE> onShutdown)
+        {
+            config.OnServiceShutdown = onShutdown;
+        }
     }
 }

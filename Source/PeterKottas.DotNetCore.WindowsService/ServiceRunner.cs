@@ -10,6 +10,7 @@ using PeterKottas.DotNetCore.WindowsService.Interfaces;
 using Microsoft.Extensions.PlatformAbstractions;
 using System.IO;
 using System.Threading.Tasks;
+using PeterKottas.DotNetCore.WindowsService.StateMachines;
 
 namespace PeterKottas.DotNetCore.WindowsService
 {
@@ -182,7 +183,7 @@ namespace PeterKottas.DotNetCore.WindowsService
                     ));
                 else if (innerConfig.Action == ActionEnum.RunInteractive)
                 {
-                    var consoleService = new InnerService(innerConfig.Name, () => Start(innerConfig), () => Stop(innerConfig));
+                    var consoleService = new InnerService(innerConfig.Name, () => Start(innerConfig), () => Stop(innerConfig), () => Shutdown(innerConfig));
                     var consoleHost = new ConsoleServiceHost<SERVICE>(consoleService, innerConfig);
 
                     innerConfig.Service = innerConfig.ServiceFactory(innerConfig.ExtraArguments,
@@ -242,15 +243,15 @@ namespace PeterKottas.DotNetCore.WindowsService
             }
             try
             {
-                new Win32ServiceManager().CreateService(
-                    config.Name,
-                    config.DisplayName,
-                    config.Description,
-                    GetServiceCommand(config.ExtraArguments),
-                    cred,
-                    autoStart: true,
-                    startImmediately: config.StartImmediately,
-                    errorSeverity: ErrorSeverity.Normal);
+                new Win32ServiceManager().CreateService(new ServiceDefinition(config.Name, GetServiceCommand(config.ExtraArguments))
+                {
+                    DisplayName = config.DisplayName,
+                    Description = config.Description,
+                    Credentials = cred,
+                    AutoStart = true,
+                    DelayedAutoStart = !config.StartImmediately,
+                    ErrorSeverity = ErrorSeverity.Normal
+                });
                 Console.WriteLine($@"Successfully registered and started service ""{config.Name}"" (""{config.Description}"")");
             }
             catch (Exception e)
@@ -399,8 +400,8 @@ namespace PeterKottas.DotNetCore.WindowsService
                     UsingServiceController(config, (sc, cfg) => Uninstall(cfg, sc));
                     break;
                 case ActionEnum.Run:
-                    var testService = new InnerService(config.Name, () => Start(config), () => Stop(config));
-                    var serviceHost = new Win32ServiceHost(testService);
+                    var testService = new InnerService(config.Name, () => Start(config), () => Stop(config), () => Shutdown(config));
+                    var serviceHost = new Win32ServiceHost(config.Name, new ShutdownableServiceStateMachine(testService));
                     serviceHost.Run();
                     break;
                 case ActionEnum.RunInteractive:
@@ -439,6 +440,18 @@ namespace PeterKottas.DotNetCore.WindowsService
             try
             {
                 config.OnServiceStop(config.Service);
+            }
+            catch (Exception e)
+            {
+                Error(config, e);
+            }
+        }
+
+        private static void Shutdown(HostConfiguration<SERVICE> config)
+        {
+            try
+            {
+                config.OnServiceShutdown(config.Service);
             }
             catch (Exception e)
             {
