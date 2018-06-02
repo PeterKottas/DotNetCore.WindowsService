@@ -117,6 +117,12 @@ namespace PeterKottas.DotNetCore.WindowsService
                             case "install":
                                 innerConfig.Action = ActionEnum.Install;
                                 break;
+                            case "pause":
+                                innerConfig.Action = ActionEnum.Pause;
+                                break;
+                            case "continue":
+                                innerConfig.Action = ActionEnum.Continue;
+                                break;
                             case "start":
                                 innerConfig.Action = ActionEnum.Start;
                                 break;
@@ -378,6 +384,12 @@ namespace PeterKottas.DotNetCore.WindowsService
             {
                 case ActionEnum.Install:
                     UsingServiceController(config, (sc, cfg) => Install(cfg, sc));
+                    break;
+                case ActionEnum.Pause:
+                    UsingServiceController(config, (sc, cfg) => PauseService(cfg, sc));
+                    break;
+                case ActionEnum.Continue:
+                    UsingServiceController(config, (sc, cfg) => ContinueService(cfg, sc));
                     break;
                 case ActionEnum.Uninstall:
                     UsingServiceController(config, (sc, cfg) => Uninstall(cfg, sc));

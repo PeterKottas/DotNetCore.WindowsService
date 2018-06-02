@@ -12,6 +12,8 @@ namespace PeterKottas.DotNetCore.WindowsService.Enums
         Run,
         RunInteractive,
         Stop,
-        Start
+        Start,
+        Pause,
+        Continue
     }
 }
