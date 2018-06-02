@@ -198,6 +198,10 @@ namespace PeterKottas.DotNetCore.WindowsService
                     // Return the console host run result, so we get some idea what failed if result is not OK
                     return (int)consoleHost.Run();
                 }
+                else
+                {
+                    innerConfig.Service = innerConfig.ServiceFactory(innerConfig.ExtraArguments, null);
+                }
 
                 ConfigureService(innerConfig);
 
