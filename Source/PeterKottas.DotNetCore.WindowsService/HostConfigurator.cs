@@ -39,6 +39,16 @@ namespace PeterKottas.DotNetCore.WindowsService
             }
         }
 
+        public void SetConsoleTimeout(int milliseconds)
+        {
+            innerConfig.ConsoleTimeout = milliseconds;
+        }
+
+        public void SetServiceTimeout(int milliseconds)
+        {
+            innerConfig.ServiceTimeout = milliseconds;
+        }
+
         public string GetDefaultName()
         {
             return innerConfig.Name;

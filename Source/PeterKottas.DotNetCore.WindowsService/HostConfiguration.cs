@@ -34,6 +34,10 @@ namespace PeterKottas.DotNetCore.WindowsService
 
         public bool StartImmediately { get; set; } = true;
 
+        public int ConsoleTimeout { get; set; } = 150;
+
+        public int ServiceTimeout { get; set; } = 1500;
+
         public Win32ServiceCredentials DefaultCred { get; set; } = Win32ServiceCredentials.LocalSystem;
 
         public SERVICE Service { get; set; }
