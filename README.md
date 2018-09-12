@@ -80,7 +80,7 @@ Community, feel encouraged to add more templates if you find something missing/u
 		var name = config.GetDefaultName();
 		config.Service(serviceConfig =>
 			{
-				serviceConfig.ServiceFactory((extraArguments) =>
+				serviceConfig.ServiceFactory((extraArguments, microServiceController) =>
 			{
 				return new ExampleService();
 			});
