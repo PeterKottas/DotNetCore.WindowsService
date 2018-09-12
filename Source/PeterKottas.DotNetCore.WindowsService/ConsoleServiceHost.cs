@@ -77,7 +77,7 @@ namespace PeterKottas.DotNetCore.WindowsService
 				Console.WriteLine("Stopping the {0} service", _consoleService.ServiceName);
 
 				Task stopTask = Task.Run(() => _consoleService.Stop());
-				if (!stopTask.Wait(TimeSpan.FromMilliseconds(1500)))
+                if (!stopTask.Wait(TimeSpan.FromMilliseconds(_innerConfig.ServiceTimeout)))
 					throw new Exception("The service failed to stop (returned false).");
 
 				_exitCode = ExitCode.Ok;
@@ -109,7 +109,7 @@ namespace PeterKottas.DotNetCore.WindowsService
 
 			Console.WriteLine("Control+C detected, attempting to stop service.");
 			Task stopTask = Task.Run(() => _consoleService.Stop());
-			if (stopTask.Wait(TimeSpan.FromMilliseconds(150)))
+            if (stopTask.Wait(TimeSpan.FromMilliseconds(_innerConfig.ConsoleTimeout)))
 			{
 				_hasCancelled = true;
 				_exit.Set();
