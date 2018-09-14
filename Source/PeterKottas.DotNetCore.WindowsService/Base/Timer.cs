@@ -18,21 +18,33 @@ namespace PeterKottas.DotNetCore.WindowsService.Base
 
         public Action OnTimer { get; set; }
 
+        public Func<Task> OnTimerAsync { get; set; }
+
         public Action<Exception> OnException { get; set; }
 
         public string Name { get; private set; }
 
         public int Interval { get; set; }
 
-        public Timer(string name, int interval, Action onTimer, Action<Exception> onException = null)
+        public Timer(string name, int interval, Func<Task> onTimerAsync, Action<Exception> onException = null)
         {
-            this.OnTimer = onTimer == null ? () => { } : onTimer; ;
+            this.OnTimer = null;
+            this.OnTimerAsync = onTimerAsync == null ? default(Func<Task>) : onTimerAsync; ;
             this.Name = name;
             this.Interval = interval;
             this.OnException = onException == null ? (e) => { } : onException;
         }
 
-        private void InternalWork(object arg)
+        public Timer(string name, int interval, Action onTimer, Action<Exception> onException = null)
+        {
+            this.OnTimer = onTimer == null ? () => { } : onTimer; ;
+            this.OnTimerAsync = null;
+            this.Name = name;
+            this.Interval = interval;
+            this.OnException = onException == null ? (e) => { } : onException;
+        }
+
+        private async void InternalWork(object arg)
         {
             while (running)
             {
@@ -40,7 +52,10 @@ namespace PeterKottas.DotNetCore.WindowsService.Base
                 {
                     if (!paused)
                     {
-                        this.OnTimer();
+                        if (this.OnTimer != null)
+                            this.OnTimer();
+                        else
+                            await this.OnTimerAsync();
                     }
                 }
                 catch (Exception exception)
