@@ -8,12 +8,13 @@ This library was created to enable one to host CONSOLE dot net core applications
 
 ## Installation
 
-Using nuget:
-**Install-Package PeterKottas.DotNetCore.WindowsService**
+Using NuGet:
+
+`Install-Package PeterKottas.DotNetCore.WindowsService`
 
 ## Quick start
 
-Easiest way to start is using a brand new template. Just do :
+Easiest way to start is using a brand new template. Just do:
 ```
 dotnet new -i PeterKottas.DotNetCore.WindowsService.Templates::*
 ```
@@ -149,8 +150,8 @@ Community, feel encouraged to add more templates if you find something missing/u
 13. Run the service with **display-name:YOUR_DISPLAY_NAME** and it setup Display name for the service.
 14. Run the service with **name:YOUR_NAME** and it setup name for the service.
 15. Run the service with **start-immediately:(true|false)** to start service immediately after install. Defaults to **true**.
-16. You can find the complete example in PeterKottas.DotNetCore.Example project.
-17. Install the service using powershell: dotnet.exe $serviceDllPath action:install
+16. You can find the complete example in [PeterKottas.DotNetCore.Example](https://github.com/PeterKottas/DotNetCore.WindowsService/tree/master/Source/PeterKottas.DotNetCore.WindowsService.Example) project.
+17. Install the service using powershell: `dotnet.exe $serviceDllPath action:install`
 
 ## Contributing
 
@@ -158,12 +159,12 @@ Community, feel encouraged to add more templates if you find something missing/u
 2. Create your feature branch: `git checkout -b my-new-feature`
 3. Commit your changes: `git commit -am 'Add some feature'`
 4. Push to the branch: `git push origin my-new-feature`
-5. Submit a pull request :D
+5. Submit a [pull request](https://github.com/PeterKottas/DotNetCore.WindowsService/pulls) :D
 
 ## License
 
-MIT 
+[MIT](https://github.com/PeterKottas/DotNetCore.WindowsService/blob/master/LICENSE)
 
 ## Credit
 
-Huge thanks goes to @dasMulli the guy behind a useful [lib](https://github.com/dasMulli/dotnet-win32-service) which is one of the dependecies for this library.
+Huge thanks goes to [@dasMulli](https://github.com/dasMulli) the guy behind a useful [lib](https://github.com/dasMulli/dotnet-win32-service) which is one of the dependecies for this library.
