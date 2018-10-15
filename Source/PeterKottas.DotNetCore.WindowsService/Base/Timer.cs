@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace PeterKottas.DotNetCore.WindowsService.Base
 {
@@ -11,10 +8,10 @@ namespace PeterKottas.DotNetCore.WindowsService.Base
     /// </summary>
     public class Timer
     {
-        private Thread thread;
-        private AutoResetEvent stopRequest;
-        private bool running = true;
-        private bool paused = false;
+        private Thread _thread;
+        private AutoResetEvent _stopRequest;
+        private bool _running = true;
+        private bool _paused;
 
         public Action OnTimer { get; set; }
 
@@ -26,38 +23,38 @@ namespace PeterKottas.DotNetCore.WindowsService.Base
 
         public Timer(string name, int interval, Action onTimer, Action<Exception> onException = null)
         {
-            this.OnTimer = onTimer == null ? () => { } : onTimer; ;
-            this.Name = name;
-            this.Interval = interval;
-            this.OnException = onException == null ? (e) => { } : onException;
+            OnTimer = onTimer == null ? () => { } : onTimer; ;
+            Name = name;
+            Interval = interval;
+            OnException = onException == null ? (e) => { } : onException;
         }
 
         private void InternalWork(object arg)
         {
-            while (running)
+            while (_running)
             {
                 try
                 {
-                    if (!paused)
+                    if (!_paused)
                     {
-                        this.OnTimer();
+                        OnTimer();
                     }
                 }
                 catch (Exception exception)
                 {
-                    this.OnException(exception);
+                    OnException(exception);
                 }
 
                 try
                 {
-                    if (stopRequest.WaitOne(Interval))
+                    if (_stopRequest.WaitOne(Interval))
                     {
                         return;
                     }
                 }
                 catch (Exception exception)
                 {
-                    this.OnException(exception);
+                    OnException(exception);
                 }
 
             }
@@ -65,34 +62,34 @@ namespace PeterKottas.DotNetCore.WindowsService.Base
 
         public void Start()
         {
-            stopRequest = new AutoResetEvent(false);
-            running = true;
-            thread = new Thread(InternalWork);
-            thread.Start();
+            _stopRequest = new AutoResetEvent(false);
+            _running = true;
+            _thread = new Thread(InternalWork);
+            _thread.Start();
         }
 
         public void Pause()
         {
-            paused = true;
+            _paused = true;
         }
 
         public void Resume()
         {
-            paused = false;
+            _paused = false;
         }
 
         public void Stop()
         {
-            if (running)
-            {
-                running = false;
-                stopRequest.Set();
-                thread.Join();
+            if (!_running)
+                return;
 
-                thread = null;
-                stopRequest.Dispose();
-                stopRequest = null;
-            }
+            _running = false;
+            _stopRequest.Set();
+            _thread.Join();
+
+            _thread = null;
+            _stopRequest.Dispose();
+            _stopRequest = null;
         }
     }
 }

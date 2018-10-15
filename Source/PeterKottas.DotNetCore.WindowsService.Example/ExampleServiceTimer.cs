@@ -9,6 +9,7 @@ namespace PeterKottas.DotNetCore.WindowsService.Example
 	public class ExampleServiceTimer : MicroService, IMicroService
     {
         private IMicroServiceController controller;
+        private readonly string _fileName = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "log.txt");
 
         public ExampleServiceTimer()
         {
@@ -20,22 +21,21 @@ namespace PeterKottas.DotNetCore.WindowsService.Example
             this.controller = controller;
         }
 
-        private string fileName = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "log.txt");
         public void Start()
         {
             StartBase();
             Timers.Start("Poller", 1000, () =>
             {
-                File.AppendAllText(fileName, string.Format("Polling at {0}\n", DateTime.Now.ToString("o")));
+                File.AppendAllText(_fileName, string.Format("Polling at {0}\n", DateTime.Now.ToString("o")));
             });
             Console.WriteLine("I started");
-            File.AppendAllText(fileName, "Started\n");
+            File.AppendAllText(_fileName, "Started\n");
         }
 
         public void Stop()
         {
             StopBase();
-            File.AppendAllText(fileName, "Stopped\n");
+            File.AppendAllText(_fileName, "Stopped\n");
             Console.WriteLine("I stopped");
         }
     }

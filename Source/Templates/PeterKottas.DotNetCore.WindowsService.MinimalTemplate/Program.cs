@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.PlatformAbstractions;
-using PeterKottas.DotNetCore.WindowsService;
 using System;
 using System.IO;
 
@@ -10,6 +9,7 @@ namespace PeterKottas.DotNetCore.WindowsService.MinimalTemplate
         public static void Main(string[] args)
         {
             var fileName = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "log.txt");
+
             ServiceRunner<ExampleService>.Run(config =>
             {
                 var name = config.GetDefaultName();

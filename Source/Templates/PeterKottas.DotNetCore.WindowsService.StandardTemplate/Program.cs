@@ -1,10 +1,7 @@
-﻿using System;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.PlatformAbstractions;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace PeterKottas.DotNetCore.WindowsService.StandardTemplate
 {
@@ -28,7 +25,7 @@ namespace PeterKottas.DotNetCore.WindowsService.StandardTemplate
                 .AddLogging(builder =>
                 {
                     builder
-                    .SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace)
+                    .SetMinimumLevel(LogLevel.Trace)
                     .AddProvider(new LogFileProvider()); // Implemented vanilla LogFile provider but is easily swapped for Nlog or SeriLog (et al.) providers
 
                 })
@@ -37,12 +34,12 @@ namespace PeterKottas.DotNetCore.WindowsService.StandardTemplate
                 .AddConsole())
                 .BuildServiceProvider();
 
-            var _logger = svcProvider.GetRequiredService<ILoggerFactory>().CreateLogger<Program>();
-
+            var logger = svcProvider.GetRequiredService<ILoggerFactory>().CreateLogger<Program>();
 
             ServiceRunner<ExampleService>.Run(config =>
             {
                 var name = config.GetDefaultName();
+
                 config.Service(serviceConfig =>
                 {
                     serviceConfig.ServiceFactory((extraArguments, controller) =>
@@ -52,19 +49,19 @@ namespace PeterKottas.DotNetCore.WindowsService.StandardTemplate
 
                     serviceConfig.OnStart((service, extraParams) =>
                     {
-                        _logger.LogTrace("Service {0} started", name);
+                        logger.LogTrace("Service {0} started", name);
                         service.Start();
                     });
 
                     serviceConfig.OnStop(service =>
                     {
-                        _logger.LogTrace("Service {0} stopped", name);
+                        logger.LogTrace("Service {0} stopped", name);
                         service.Stop();
                     });
 
                     serviceConfig.OnError(e =>
                     {
-                        _logger.LogError(e, string.Format("Service {0} errored with exception", name));
+                        logger.LogError(e, string.Format("Service {0} errored with exception", name));
                     });
                 });
             });

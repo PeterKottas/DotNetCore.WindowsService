@@ -1,11 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace PeterKottas.DotNetCore.WindowsService.StandardTemplate
 {
-    // Thanks to Andrew Lock for basic details needed here: https://andrewlock.net/creating-a-rolling-file-logging-provider-for-asp-net-core-2-0/
+    // Thanks to Andrew Lock for basic details needed here:
+    // https://andrewlock.net/creating-a-rolling-file-logging-provider-for-asp-net-core-2-0/
     public class LogFileProvider : ILoggerProvider
     {
         public ILogger CreateLogger(string categoryName)
@@ -26,13 +26,15 @@ namespace PeterKottas.DotNetCore.WindowsService.StandardTemplate
 
     public class FileLogger : ILogger
     {
-        LogFileProvider _provider;
-        string _category;
+        private readonly LogFileProvider _provider;
+        private readonly string _category;
+
         public FileLogger(LogFileProvider provider, string categoryName)
         {
             _provider = provider;
             _category = categoryName;
         }
+
         public IDisposable BeginScope<TState>(TState state)
         {
             return null;
@@ -44,6 +46,7 @@ namespace PeterKottas.DotNetCore.WindowsService.StandardTemplate
             {
                 return false;
             }
+
             return true;
         }
 
@@ -55,6 +58,7 @@ namespace PeterKottas.DotNetCore.WindowsService.StandardTemplate
             }
 
             var builder = new StringBuilder();
+
             builder.Append(timestamp.ToString("yyyy-MM-dd HH:mm:ss.fff zzz"));
             builder.Append(" [");
             builder.Append(logLevel.ToString());

@@ -1,23 +1,20 @@
 ﻿using PeterKottas.DotNetCore.WindowsService.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PeterKottas.DotNetCore.WindowsService
 {
     public class MicroServiceController : IMicroServiceController
     {
-        private Action stop;
+        private readonly Action _stop;
 
         public MicroServiceController(Action stop)
         {
-            this.stop = stop;
+            _stop = stop;
         }
 
         public void Stop()
         {
-            stop();
+            _stop();
         }
     }
 }
