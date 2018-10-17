@@ -9,16 +9,16 @@ namespace PeterKottas.DotNetCore.WindowsService
 	/// Copy of Topshelf ConsoleRunHost
 	/// https://github.com/Topshelf/Topshelf/blob/develop/src/Topshelf/Hosts/ConsoleRunHost.cs
 	/// </summary>
-	class ConsoleServiceHost<SERVICE>
-		where SERVICE : IMicroService
+	class ConsoleServiceHost<TService>
+		where TService : IMicroService
 	{
-		private InnerService _consoleService = null;
-		private HostConfiguration<SERVICE> _innerConfig = null;
+		private readonly InnerService _consoleService;
+		private readonly HostConfiguration<TService> _innerConfig;
 		private ExitCode _exitCode = 0;
-		private ManualResetEvent _exit = null;
-		private volatile bool _hasCancelled = false;
+		private ManualResetEvent _exit;
+		private volatile bool _hasCancelled;
 
-		public ConsoleServiceHost(InnerService consoleService, HostConfiguration<SERVICE> innerConfig)
+		public ConsoleServiceHost(InnerService consoleService, HostConfiguration<TService> innerConfig)
 		{
 			_consoleService = consoleService 
 				?? throw new ArgumentNullException(nameof(consoleService));
@@ -32,6 +32,7 @@ namespace PeterKottas.DotNetCore.WindowsService
 			AppDomain.CurrentDomain.UnhandledException += CatchUnhandledException;
 
 			bool started = false;
+
 			try
 			{
 				Console.WriteLine("Starting up as a console service host");
@@ -77,6 +78,7 @@ namespace PeterKottas.DotNetCore.WindowsService
 				Console.WriteLine("Stopping the {0} service", _consoleService.ServiceName);
 
 				Task stopTask = Task.Run(() => _consoleService.Stop());
+
                 if (!stopTask.Wait(TimeSpan.FromMilliseconds(_innerConfig.ServiceTimeout)))
 					throw new Exception("The service failed to stop (returned false).");
 
@@ -109,6 +111,7 @@ namespace PeterKottas.DotNetCore.WindowsService
 
 			Console.WriteLine("Control+C detected, attempting to stop service.");
 			Task stopTask = Task.Run(() => _consoleService.Stop());
+
             if (stopTask.Wait(TimeSpan.FromMilliseconds(_innerConfig.ConsoleTimeout)))
 			{
 				_hasCancelled = true;
@@ -123,7 +126,7 @@ namespace PeterKottas.DotNetCore.WindowsService
 
 		private void CatchUnhandledException(object sender, UnhandledExceptionEventArgs e)
 		{
-			Console.WriteLine("The service threw an unhandled exception: {0}", e.ToString());
+			Console.WriteLine("The service threw an unhandled exception: {0}", e);
 
 			if (!e.IsTerminating)
 				return;

@@ -1,56 +1,53 @@
 ﻿using DasMulli.Win32.ServiceUtils;
 using PeterKottas.DotNetCore.WindowsService.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PeterKottas.DotNetCore.WindowsService
 {
     public class InnerService : IShutdownableWin32Service
     {
-        string serviceName;
-        Action onStart;
-        Action onStopped;
-        Action onShutdown;
+        private readonly string _serviceName;
+        private readonly Action _onStart;
+        private readonly Action _onStopped;
+        private readonly Action _onShutdown;
 
         public InnerService(string serviceName, Action onStart, Action onStopped, Action onShutdown)
         {
-            this.serviceName = serviceName;
-            this.onStart = onStart;
-            this.onStopped = onStopped;
-            this.onShutdown = onShutdown;
+            _serviceName = serviceName;
+            _onStart = onStart;
+            _onStopped = onStopped;
+            _onShutdown = onShutdown;
         }
 
         public string ServiceName
         {
             get
             {
-                return serviceName;
+                return _serviceName;
             }
         }
 
         public void Shutdown()
         {
-            onShutdown();
+            _onShutdown();
         }
 
         public void Start(string[] startupArguments, ServiceStoppedCallback serviceStoppedCallback)
         {
             try
             {
-                onStart();
+                _onStart();
             }
             catch (Exception)
             {
-                onStopped();
+                _onStopped();
                 serviceStoppedCallback();
             }
         }
 
         public void Stop()
         {
-            onStopped();
+            _onStopped();
         }
     }
 }

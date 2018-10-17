@@ -1,16 +1,13 @@
 ﻿using DasMulli.Win32.ServiceUtils;
 using PeterKottas.DotNetCore.WindowsService.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
 
 namespace PeterKottas.DotNetCore.WindowsService.StateMachines
 {
     public sealed class ShutdownableServiceStateMachine : IWin32ServiceStateMachine
     {
-        private readonly IShutdownableWin32Service serviceImplementation;
-        private ServiceStatusReportCallback statusReportCallback;
+        private readonly IShutdownableWin32Service _serviceImplementation;
+        private ServiceStatusReportCallback _statusReportCallback;
 
         /// <summary>
         /// Initializes a new <see cref="SimpleServiceStateMachine"/> to run the specified service.
@@ -18,7 +15,7 @@ namespace PeterKottas.DotNetCore.WindowsService.StateMachines
         /// <param name="serviceImplementation">The service implementation.</param>
         public ShutdownableServiceStateMachine(IShutdownableWin32Service serviceImplementation)
         {
-            this.serviceImplementation = serviceImplementation;
+            _serviceImplementation = serviceImplementation;
         }
 
         /// <summary>
@@ -31,11 +28,11 @@ namespace PeterKottas.DotNetCore.WindowsService.StateMachines
         [SuppressMessage("ReSharper", "ParameterHidesMember")]
         public void OnStart(string[] startupArguments, ServiceStatusReportCallback statusReportCallback)
         {
-            this.statusReportCallback = statusReportCallback;
+            _statusReportCallback = statusReportCallback;
 
             try
             {
-                serviceImplementation.Start(startupArguments, HandleServiceImplementationStoppedOnItsOwn);
+                _serviceImplementation.Start(startupArguments, HandleServiceImplementationStoppedOnItsOwn);
 
                 statusReportCallback(ServiceState.Running, ServiceAcceptedControlCommandsFlags.Stop | ServiceAcceptedControlCommandsFlags.Shutdown, win32ExitCode: 0, waitHint: 0);
             }
@@ -54,39 +51,39 @@ namespace PeterKottas.DotNetCore.WindowsService.StateMachines
         {
             if (command == ServiceControlCommand.Stop)
             {
-                statusReportCallback(ServiceState.StopPending, ServiceAcceptedControlCommandsFlags.None, win32ExitCode: 0, waitHint: 3000);
+                _statusReportCallback(ServiceState.StopPending, ServiceAcceptedControlCommandsFlags.None, win32ExitCode: 0, waitHint: 3000);
 
                 var win32ExitCode = 0;
 
                 try
                 {
-                    serviceImplementation.Stop();
+                    _serviceImplementation.Stop();
                 }
                 catch
                 {
                     win32ExitCode = -1;
                 }
 
-                statusReportCallback(ServiceState.Stopped, ServiceAcceptedControlCommandsFlags.None, win32ExitCode, waitHint: 0);
+                _statusReportCallback(ServiceState.Stopped, ServiceAcceptedControlCommandsFlags.None, win32ExitCode, waitHint: 0);
             }
             else if (command == ServiceControlCommand.Shutdown)
             {
                 try
                 {
-                    statusReportCallback(ServiceState.StopPending, ServiceAcceptedControlCommandsFlags.None, win32ExitCode: 0, waitHint: 3000); //this is probably too much, see note down below
-                    serviceImplementation.Shutdown();
+                    _statusReportCallback(ServiceState.StopPending, ServiceAcceptedControlCommandsFlags.None, win32ExitCode: 0, waitHint: 3000); //this is probably too much, see note down below
+                    _serviceImplementation.Shutdown();
                 }
                 catch { }
                 finally
                 {
-                    statusReportCallback(ServiceState.Stopped, ServiceAcceptedControlCommandsFlags.None, win32ExitCode: 0, waitHint: 0);
+                    _statusReportCallback(ServiceState.Stopped, ServiceAcceptedControlCommandsFlags.None, win32ExitCode: 0, waitHint: 0);
                 }
             }
         }
 
         private void HandleServiceImplementationStoppedOnItsOwn()
         {
-            statusReportCallback(ServiceState.Stopped, ServiceAcceptedControlCommandsFlags.None, win32ExitCode: 0, waitHint: 0);
+            _statusReportCallback(ServiceState.Stopped, ServiceAcceptedControlCommandsFlags.None, win32ExitCode: 0, waitHint: 0);
         }
     }
 }

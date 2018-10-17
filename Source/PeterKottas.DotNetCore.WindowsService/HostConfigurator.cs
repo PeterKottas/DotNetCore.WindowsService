@@ -1,64 +1,62 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using PeterKottas.DotNetCore.WindowsService.Configurators.Service;
 using PeterKottas.DotNetCore.WindowsService.Interfaces;
 
 namespace PeterKottas.DotNetCore.WindowsService
 {
-    public class HostConfigurator<SERVICE> where SERVICE : IMicroService
+    public class HostConfigurator<TService> where TService : IMicroService
     {
-        HostConfiguration<SERVICE> innerConfig;
-        public HostConfigurator(HostConfiguration<SERVICE> innerConfig)
+        private readonly HostConfiguration<TService> _innerConfig;
+
+        public HostConfigurator(HostConfiguration<TService> innerConfig)
         {
-            this.innerConfig = innerConfig;
+            _innerConfig = innerConfig;
         }
 
         public void SetName(string serviceName, bool force = false)
         {
-            if (!string.IsNullOrEmpty(innerConfig.Name) || force)
+            if (!string.IsNullOrEmpty(_innerConfig.Name) || force)
             {
-                innerConfig.Name = serviceName;
+                _innerConfig.Name = serviceName;
             }
         }
 
         public void SetDisplayName(string displayName, bool force = false)
         {
-            if (!string.IsNullOrEmpty(innerConfig.DisplayName) || force)
+            if (!string.IsNullOrEmpty(_innerConfig.DisplayName) || force)
             {
-                innerConfig.DisplayName = displayName;
+                _innerConfig.DisplayName = displayName;
             }
         }
 
         public void SetDescription(string description, bool force = false)
         {
-            if (!string.IsNullOrEmpty(innerConfig.Description) || force)
+            if (!string.IsNullOrEmpty(_innerConfig.Description) || force)
             {
-                innerConfig.Description = description;
+                _innerConfig.Description = description;
             }
         }
 
         public void SetConsoleTimeout(int milliseconds)
         {
-            innerConfig.ConsoleTimeout = milliseconds;
+            _innerConfig.ConsoleTimeout = milliseconds;
         }
 
         public void SetServiceTimeout(int milliseconds)
         {
-            innerConfig.ServiceTimeout = milliseconds;
+            _innerConfig.ServiceTimeout = milliseconds;
         }
 
         public string GetDefaultName()
         {
-            return innerConfig.Name;
+            return _innerConfig.Name;
         }
 
         public bool IsNameNullOrEmpty
         {
             get
             {
-                return string.IsNullOrEmpty(innerConfig.Name);
+                return string.IsNullOrEmpty(_innerConfig.Name);
             }
         }
 
@@ -66,7 +64,7 @@ namespace PeterKottas.DotNetCore.WindowsService
         {
             get
             {
-                return string.IsNullOrEmpty(innerConfig.Description);
+                return string.IsNullOrEmpty(_innerConfig.Description);
             }
         }
 
@@ -74,24 +72,26 @@ namespace PeterKottas.DotNetCore.WindowsService
         {
             get
             {
-                return string.IsNullOrEmpty(innerConfig.DisplayName);
+                return string.IsNullOrEmpty(_innerConfig.DisplayName);
             }
         }
 
-        public void Service(Action<ServiceConfigurator<SERVICE>> serviceConfigAction)
+        public void Service(Action<ServiceConfigurator<TService>> serviceConfigAction)
         {
             try
             {
-                var serviceConfig = new ServiceConfigurator<SERVICE>(innerConfig);
+                var serviceConfig = new ServiceConfigurator<TService>(_innerConfig);
+
                 serviceConfigAction(serviceConfig);
-                if (innerConfig.ServiceFactory == null)
+
+                if (_innerConfig.ServiceFactory == null)
                 {
-                    throw new ArgumentException("It's necesarry to configure action that creates the service (ServiceFactory)");
+                    throw new ArgumentException("It's necessary to configure action that creates the service (ServiceFactory)");
                 }
 
-                if (innerConfig.OnServiceStart == null)
+                if (_innerConfig.OnServiceStart == null)
                 {
-                    throw new ArgumentException("It's necesarry to configure action that is called when the service starts");
+                    throw new ArgumentException("It's necessary to configure action that is called when the service starts");
                 }
             }
             catch (Exception e)

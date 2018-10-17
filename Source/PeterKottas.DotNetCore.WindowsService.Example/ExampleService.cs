@@ -8,45 +8,45 @@ namespace PeterKottas.DotNetCore.WindowsService.Example
 {
     public class ExampleService : IMicroService
     {
-        private IMicroServiceController controller;
+        private IMicroServiceController _controller;
 
-		private Timer timer = new Timer(1000);
+		private readonly Timer _timer = new Timer(1000);
+        private readonly string _fileName = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "log.txt");
 
         public ExampleService()
         {
-            controller = null;
+            _controller = null;
         }
 
         public ExampleService(IMicroServiceController controller)
         {
-            this.controller = controller;
+            _controller = controller;
         }
 
-        private string fileName = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "log.txt");
         public void Start()
         {
             Console.WriteLine("I started");
-            Console.WriteLine(fileName);
-            File.AppendAllText(fileName, "Started\n");
+            Console.WriteLine(_fileName);
+            File.AppendAllText(_fileName, "Started\n");
 
             /**
              * A timer is a simple example. But this could easily 
              * be a port or messaging queue client
              */ 
-			timer.Elapsed += _timer_Elapsed;
-			timer.Start();
+			_timer.Elapsed += _timer_Elapsed;
+			_timer.Start();
         }
-
-		private void _timer_Elapsed(object sender, ElapsedEventArgs e)
-		{
-			File.AppendAllText(fileName, string.Format("Polling at {0}\n", DateTime.Now.ToString("o")));
-		}
 
 		public void Stop()
         {
-			timer.Stop();
-            File.AppendAllText(fileName, "Stopped\n");
+			_timer.Stop();
+            File.AppendAllText(_fileName, "Stopped\n");
             Console.WriteLine("I stopped");
+        }
+
+        private void _timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            File.AppendAllText(_fileName, string.Format("Polling at {0}\n", DateTime.Now.ToString("o")));
         }
     }
 }

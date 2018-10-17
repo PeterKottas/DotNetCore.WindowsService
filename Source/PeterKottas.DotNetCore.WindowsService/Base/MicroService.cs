@@ -1,15 +1,11 @@
-﻿using PeterKottas.DotNetCore.WindowsService.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
 
 namespace PeterKottas.DotNetCore.WindowsService.Base
 {
     public class MicroService : IDisposable
     {
         protected Timers Timers { get; private set; }
-        private bool disposed = false;
+        private bool _disposed;
 
         public void StartBase()
         {
@@ -32,7 +28,7 @@ namespace PeterKottas.DotNetCore.WindowsService.Base
 
         protected virtual void Dispose(bool disposing)
         {
-            if (disposed)
+            if (_disposed)
                 return;
 
             if (disposing)
@@ -40,7 +36,7 @@ namespace PeterKottas.DotNetCore.WindowsService.Base
                 StopBase();
             }
 
-            disposed = true;
+            _disposed = true;
         }
 
         ~MicroService()

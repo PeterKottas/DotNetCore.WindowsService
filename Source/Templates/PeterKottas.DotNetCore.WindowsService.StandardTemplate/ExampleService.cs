@@ -1,18 +1,14 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.PlatformAbstractions;
 using PeterKottas.DotNetCore.WindowsService.Base;
 using PeterKottas.DotNetCore.WindowsService.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace PeterKottas.DotNetCore.WindowsService.StandardTemplate
 {
     public class ExampleService : MicroService, IMicroService
     {
         private IMicroServiceController _controller;
-        private ILogger<ExampleService> _logger;
+        private readonly ILogger<ExampleService> _logger;
 
         public ExampleService()
         {

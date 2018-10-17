@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace PeterKottas.DotNetCore.WindowsService.Base
 {
     public class Timers
     {
-        List<Timer> timers = new List<Timer>();
+        private readonly List<Timer> _timers = new List<Timer>();
 
         public void Start(string timerName, int interval, Action onTimer, Action<Exception> onException = null)
         {
-            var tmpTimer = timers.Where(x => x.Name == timerName).FirstOrDefault();
+            var tmpTimer = _timers.FirstOrDefault(x => x.Name == timerName);
+
             if (tmpTimer == null)
             {
                 tmpTimer = new Timer(timerName, interval, onTimer, onException);
-                timers.Add(tmpTimer);
+                _timers.Add(tmpTimer);
 
                 tmpTimer.Start();
             }
@@ -29,27 +29,28 @@ namespace PeterKottas.DotNetCore.WindowsService.Base
 
         public void Update(string timerName, int interval = 0, Action onTimer = null, Action<Exception> onException = null)
         {
-            var tmpTimer = timers.Where(x => x.Name == timerName).FirstOrDefault();
-            if (tmpTimer != null)
+            var tmpTimer = _timers.FirstOrDefault(x => x.Name == timerName);
+
+            if (tmpTimer == null)
+                return;
+
+            if (onTimer != null)
             {
-                if (onTimer != null)
-                {
-                    tmpTimer.OnTimer = onTimer;
-                }
-                if (onException != null)
-                {
-                    tmpTimer.OnException = onException;
-                }
-                if (interval > 0 && interval != tmpTimer.Interval)
-                {
-                    tmpTimer.Interval = interval;
-                }
+                tmpTimer.OnTimer = onTimer;
+            }
+            if (onException != null)
+            {
+                tmpTimer.OnException = onException;
+            }
+            if (interval > 0 && interval != tmpTimer.Interval)
+            {
+                tmpTimer.Interval = interval;
             }
         }
 
         public void Resume()
         {
-            foreach (var timer in timers)
+            foreach (var timer in _timers)
             {
                 timer.Resume();
             }
@@ -57,7 +58,8 @@ namespace PeterKottas.DotNetCore.WindowsService.Base
 
         public void Resume(string timerName)
         {
-            var tmpTimer = timers.Where(x => x.Name == timerName).FirstOrDefault();
+            var tmpTimer = _timers.FirstOrDefault(x => x.Name == timerName);
+
             if (tmpTimer != null)
             {
                 tmpTimer.Resume();
@@ -66,7 +68,7 @@ namespace PeterKottas.DotNetCore.WindowsService.Base
 
         public void Pause()
         {
-            foreach (var timer in timers)
+            foreach (var timer in _timers)
             {
                 timer.Pause();
             }
@@ -74,7 +76,8 @@ namespace PeterKottas.DotNetCore.WindowsService.Base
 
         public void Pause(string timerName)
         {
-            var tmpTimer = timers.Where(x => x.Name == timerName).FirstOrDefault();
+            var tmpTimer = _timers.FirstOrDefault(x => x.Name == timerName);
+
             if (tmpTimer != null)
             {
                 tmpTimer.Pause();
@@ -83,7 +86,7 @@ namespace PeterKottas.DotNetCore.WindowsService.Base
 
         public void Stop()
         {
-            foreach (var timer in timers)
+            foreach (var timer in _timers)
             {
                 timer.Stop();
             }
@@ -91,7 +94,8 @@ namespace PeterKottas.DotNetCore.WindowsService.Base
 
         public void Stop(string timerName)
         {
-            var tmpTimer = timers.Where(x => x.Name == timerName).FirstOrDefault();
+            var tmpTimer = _timers.FirstOrDefault(x => x.Name == timerName);
+
             if (tmpTimer != null)
             {
                 tmpTimer.Stop();

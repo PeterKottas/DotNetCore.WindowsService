@@ -14,19 +14,21 @@ using PeterKottas.DotNetCore.WindowsService.StateMachines;
 
 namespace PeterKottas.DotNetCore.WindowsService
 {
-    public static class ServiceRunner<SERVICE> where SERVICE : IMicroService
+    public static class ServiceRunner<TService> where TService : IMicroService
     {
-        public static int Run(Action<HostConfigurator<SERVICE>> runAction)
+        public static int Run(Action<HostConfigurator<TService>> runAction)
         {
             Directory.SetCurrentDirectory(PlatformServices.Default.Application.ApplicationBasePath);
 
-            var innerConfig = new HostConfiguration<SERVICE>();
-            innerConfig.Action = ActionEnum.RunInteractive;
-            innerConfig.Name = typeof(SERVICE).FullName;
+            var innerConfig = new HostConfiguration<TService>
+            {
+                Action = ActionEnum.RunInteractive,
+                Name = typeof(TService).FullName
+            };
 
             innerConfig.ExtraArguments = Parser.Parse(config =>
             {
-                config.AddParameter(new CmdArgParam()
+                config.AddParameter(new CmdArgParam
                 {
                     Key = "username",
                     Description = "Username for the service account",
@@ -35,7 +37,7 @@ namespace PeterKottas.DotNetCore.WindowsService
                         innerConfig.Username = val;
                     }
                 });
-                config.AddParameter(new CmdArgParam()
+                config.AddParameter(new CmdArgParam
                 {
                     Key = "password",
                     Description = "Password for the service account",
@@ -44,7 +46,7 @@ namespace PeterKottas.DotNetCore.WindowsService
                         innerConfig.Password = val;
                     }
                 });
-                config.AddParameter(new CmdArgParam()
+                config.AddParameter(new CmdArgParam
                 {
                     Key = "built-in-account",
                     Description = "Password for the service account",
@@ -68,7 +70,7 @@ namespace PeterKottas.DotNetCore.WindowsService
 
                     }
                 });
-                config.AddParameter(new CmdArgParam()
+                config.AddParameter(new CmdArgParam
                 {
                     Key = "start-immediately",
                     Description = "Start the service immediately when installing.",
@@ -80,7 +82,7 @@ namespace PeterKottas.DotNetCore.WindowsService
                         }
                     }
                 });
-                config.AddParameter(new CmdArgParam()
+                config.AddParameter(new CmdArgParam
                 {
                     Key = "name",
                     Description = "Service name",
@@ -89,7 +91,7 @@ namespace PeterKottas.DotNetCore.WindowsService
                         innerConfig.Name = val;
                     }
                 });
-                config.AddParameter(new CmdArgParam()
+                config.AddParameter(new CmdArgParam
                 {
                     Key = "description",
                     Description = "Service description",
@@ -98,7 +100,7 @@ namespace PeterKottas.DotNetCore.WindowsService
                         innerConfig.Description = val;
                     }
                 });
-                config.AddParameter(new CmdArgParam()
+                config.AddParameter(new CmdArgParam
                 {
                     Key = "display-name",
                     Description = "Service display name",
@@ -107,7 +109,7 @@ namespace PeterKottas.DotNetCore.WindowsService
                         innerConfig.DisplayName = val;
                     }
                 });
-                config.AddParameter(new CmdArgParam()
+                config.AddParameter(new CmdArgParam
                 {
                     Key = "action",
                     Description = "Installs the service. It's run like console application otherwise",
@@ -153,7 +155,7 @@ namespace PeterKottas.DotNetCore.WindowsService
 
             if (string.IsNullOrEmpty(innerConfig.Name))
             {
-                innerConfig.Name = typeof(SERVICE).FullName;
+                innerConfig.Name = typeof(TService).FullName;
             }
 
             if (string.IsNullOrEmpty(innerConfig.DisplayName))
@@ -166,34 +168,37 @@ namespace PeterKottas.DotNetCore.WindowsService
                 innerConfig.Description = "No description";
             }
 
-            var hostConfiguration = new HostConfigurator<SERVICE>(innerConfig);
+            var hostConfiguration = new HostConfigurator<TService>(innerConfig);
 
             try
             {
                 runAction(hostConfiguration);
+
                 if (innerConfig.Action == ActionEnum.Run)
+                {
                     innerConfig.Service = innerConfig.ServiceFactory(innerConfig.ExtraArguments,
                         new MicroServiceController(() =>
-                        {
-                            var task = Task.Factory.StartNew(() =>
                             {
-                                UsingServiceController(innerConfig, (sc, cfg) => StopService(cfg, sc));
-                            });
-                        }
-                    ));
+                                Task.Factory.StartNew(() =>
+                                {
+                                    UsingServiceController(innerConfig, (sc, cfg) => StopService(cfg, sc));
+                                });
+                            }
+                        ));
+                }
                 else if (innerConfig.Action == ActionEnum.RunInteractive)
                 {
                     var consoleService = new InnerService(innerConfig.Name, () => Start(innerConfig), () => Stop(innerConfig), () => Shutdown(innerConfig));
-                    var consoleHost = new ConsoleServiceHost<SERVICE>(consoleService, innerConfig);
+                    var consoleHost = new ConsoleServiceHost<TService>(consoleService, innerConfig);
 
                     innerConfig.Service = innerConfig.ServiceFactory(innerConfig.ExtraArguments,
                         new MicroServiceController(() =>
-                        {
-                            var task = Task.Factory.StartNew(() =>
                             {
-                                consoleHost.StopService();
-                            });
-                        }
+                                Task.Factory.StartNew(() =>
+                                {
+                                    consoleHost.StopService();
+                                });
+                            }
                     ));
 
                     // Return the console host run result, so we get some idea what failed if result is not OK
@@ -211,6 +216,7 @@ namespace PeterKottas.DotNetCore.WindowsService
             catch (Exception e)
             {
                 Error(innerConfig, e);
+
                 return -1;
             }
         }
@@ -218,10 +224,12 @@ namespace PeterKottas.DotNetCore.WindowsService
         private static string GetServiceCommand(List<string> extraArguments)
         {
             var host = Process.GetCurrentProcess().MainModule.FileName;
+
             if (host.EndsWith("dotnet.exe", StringComparison.OrdinalIgnoreCase))
             {
                 var appPath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath,
                     PlatformServices.Default.Application.ApplicationName + ".dll");
+
                 host = string.Format("{0} \"{1}\"", host, appPath);
             }
             else
@@ -231,16 +239,19 @@ namespace PeterKottas.DotNetCore.WindowsService
             }
 
             var fullServiceCommand = string.Format("{0} {1} {2}", host, string.Join(" ", extraArguments), "action:run");
+
             return fullServiceCommand;
         }
 
-        private static void Install(HostConfiguration<SERVICE> config, ServiceController sc, int counter = 0)
+        private static void Install(HostConfiguration<TService> config, ServiceController sc, int counter = 0)
         {
             Win32ServiceCredentials cred = config.DefaultCred;
+
             if (!string.IsNullOrEmpty(config.Username))
             {
                 cred = new Win32ServiceCredentials(config.Username, config.Password);
             }
+
             try
             {
                 new Win32ServiceManager().CreateService(new ServiceDefinition(config.Name, GetServiceCommand(config.ExtraArguments))
@@ -252,6 +263,7 @@ namespace PeterKottas.DotNetCore.WindowsService
                     DelayedAutoStart = !config.StartImmediately,
                     ErrorSeverity = ErrorSeverity.Normal
                 });
+
                 Console.WriteLine($@"Successfully registered and started service ""{config.Name}"" (""{config.Description}"")");
             }
             catch (Exception e)
@@ -268,6 +280,7 @@ namespace PeterKottas.DotNetCore.WindowsService
                         System.Threading.Thread.Sleep(500);
                         counter++;
                         string suffix = "th";
+
                         if (counter == 1)
                         {
                             suffix = "st";
@@ -280,6 +293,7 @@ namespace PeterKottas.DotNetCore.WindowsService
                         {
                             suffix = "rd";
                         }
+
                         Console.WriteLine("The specified service has been marked for deletion. Retrying {0}{1} time", counter, suffix);
                         Install(config, sc, counter);
                     }
@@ -295,7 +309,7 @@ namespace PeterKottas.DotNetCore.WindowsService
             }
         }
 
-        private static void Uninstall(HostConfiguration<SERVICE> config, ServiceController sc)
+        private static void Uninstall(HostConfiguration<TService> config, ServiceController sc)
         {
             try
             {
@@ -303,6 +317,7 @@ namespace PeterKottas.DotNetCore.WindowsService
                 {
                     StopService(config, sc);
                 }
+
                 new Win32ServiceManager().DeleteService(config.Name);
                 Console.WriteLine($@"Successfully unregistered service ""{config.Name}"" (""{config.Description}"")");
                 config.OnServiceUnInstall?.Invoke(config.Service);
@@ -313,11 +328,12 @@ namespace PeterKottas.DotNetCore.WindowsService
                 {
                     throw;
                 }
+
                 Console.WriteLine($@"Service ""{config.Name}"" (""{config.Description}"") does not exist. No action taken.");
             }
         }
 
-        private static void StopService(HostConfiguration<SERVICE> config, ServiceController sc)
+        private static void StopService(HostConfiguration<TService> config, ServiceController sc)
         {
             if (!(sc.Status == ServiceControllerStatus.Stopped | sc.Status == ServiceControllerStatus.StopPending))
             {
@@ -332,7 +348,7 @@ namespace PeterKottas.DotNetCore.WindowsService
             }
         }
 
-        private static void PauseService(HostConfiguration<SERVICE> config, ServiceController sc)
+        private static void PauseService(HostConfiguration<TService> config, ServiceController sc)
         {
             if (!(sc.Status == ServiceControllerStatus.Paused | sc.Status == ServiceControllerStatus.PausePending))
             {
@@ -347,7 +363,7 @@ namespace PeterKottas.DotNetCore.WindowsService
             }
         }
 
-        private static void ContinueService(HostConfiguration<SERVICE> config, ServiceController sc)
+        private static void ContinueService(HostConfiguration<TService> config, ServiceController sc)
         {
             if (!(sc.Status == ServiceControllerStatus.Running | sc.Status == ServiceControllerStatus.ContinuePending))
             {
@@ -362,7 +378,7 @@ namespace PeterKottas.DotNetCore.WindowsService
             }
         }
 
-        private static void StartService(HostConfiguration<SERVICE> config, ServiceController sc)
+        private static void StartService(HostConfiguration<TService> config, ServiceController sc)
         {
             if (!(sc.Status == ServiceControllerStatus.StartPending | sc.Status == ServiceControllerStatus.Running))
             {
@@ -376,14 +392,14 @@ namespace PeterKottas.DotNetCore.WindowsService
             }
         }
 
-        private static void Reinstall(HostConfiguration<SERVICE> config, ServiceController sc)
+        private static void Reinstall(HostConfiguration<TService> config, ServiceController sc)
         {
             StopService(config, sc);
             Uninstall(config, sc);
             Install(config, sc);
         }
 
-        private static void ConfigureService(HostConfiguration<SERVICE> config)
+        private static void ConfigureService(HostConfiguration<TService> config)
         {
             switch (config.Action)
             {
@@ -415,7 +431,7 @@ namespace PeterKottas.DotNetCore.WindowsService
             }
         }
 
-        private static void UsingServiceController(HostConfiguration<SERVICE> config, Action<ServiceController, HostConfiguration<SERVICE>> action)
+        private static void UsingServiceController(HostConfiguration<TService> config, Action<ServiceController, HostConfiguration<TService>> action)
         {
             using (var sc = new ServiceController(config.Name))
             {
@@ -423,7 +439,7 @@ namespace PeterKottas.DotNetCore.WindowsService
             }
         }
 
-        private static void Start(HostConfiguration<SERVICE> config)
+        private static void Start(HostConfiguration<TService> config)
         {
             try
             {
@@ -435,7 +451,7 @@ namespace PeterKottas.DotNetCore.WindowsService
             }
         }
 
-        private static void Stop(HostConfiguration<SERVICE> config)
+        private static void Stop(HostConfiguration<TService> config)
         {
             try
             {
@@ -447,7 +463,7 @@ namespace PeterKottas.DotNetCore.WindowsService
             }
         }
 
-        private static void Shutdown(HostConfiguration<SERVICE> config)
+        private static void Shutdown(HostConfiguration<TService> config)
         {
             try
             {
@@ -459,7 +475,7 @@ namespace PeterKottas.DotNetCore.WindowsService
             }
         }
 
-        private static void Error(HostConfiguration<SERVICE> config, Exception e = null)
+        private static void Error(HostConfiguration<TService> config, Exception e = null)
         {
             config.OnServiceError(e);
         }
