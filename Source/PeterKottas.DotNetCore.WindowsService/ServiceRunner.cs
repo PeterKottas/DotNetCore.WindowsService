@@ -222,16 +222,24 @@ namespace PeterKottas.DotNetCore.WindowsService
             {
                 var appPath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath,
                     PlatformServices.Default.Application.ApplicationName + ".dll");
-                host = string.Format("{0} \"{1}\"", host, appPath);
+                host = string.Format("{0} \"{1}\"", SanitiseArgument(host), appPath);
             }
             else
             {
                 //For self-contained apps, skip the dll path
                 extraArguments = extraArguments.Skip(1).ToList();
             }
-
-            var fullServiceCommand = string.Format("{0} {1} {2}", host, string.Join(" ", extraArguments), "action:run");
+            var fullServiceCommand = string.Format("{0} {1} {2}", host, string.Join(" ", extraArguments.Select(arg => SanitiseArgument(arg))), "action:run");
             return fullServiceCommand;
+        }
+
+        private static string SanitiseArgument(string arg)
+        {
+            if (string.IsNullOrEmpty(arg))
+            {
+                return arg;
+            }
+            return arg.Contains(" ") ? "\"" + arg + "\"" : arg;
         }
 
         private static void Install(HostConfiguration<SERVICE> config, ServiceController sc, int counter = 0)
