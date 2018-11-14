@@ -330,7 +330,7 @@ namespace PeterKottas.DotNetCore.WindowsService
             if (!(sc.Status == ServiceControllerStatus.Stopped | sc.Status == ServiceControllerStatus.StopPending))
             {
                 sc.Stop();
-                sc.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromMilliseconds(1000));
+                sc.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromMilliseconds(config.ServiceTimeout));
                 Console.WriteLine($@"Successfully stopped service ""{config.Name}"" (""{config.Description}"")");
                 config.OnServiceStop?.Invoke(config.Service);
             }
@@ -345,7 +345,7 @@ namespace PeterKottas.DotNetCore.WindowsService
             if (!(sc.Status == ServiceControllerStatus.Paused | sc.Status == ServiceControllerStatus.PausePending))
             {
                 sc.Pause();
-                sc.WaitForStatus(ServiceControllerStatus.Paused, TimeSpan.FromMilliseconds(1000));
+                sc.WaitForStatus(ServiceControllerStatus.Paused, TimeSpan.FromMilliseconds(config.ServiceTimeout));
                 Console.WriteLine($@"Successfully paused service ""{config.Name}"" (""{config.Description}"")");
                 config.OnServicePause?.Invoke(config.Service);
             }
@@ -360,7 +360,7 @@ namespace PeterKottas.DotNetCore.WindowsService
             if (!(sc.Status == ServiceControllerStatus.Running | sc.Status == ServiceControllerStatus.ContinuePending))
             {
                 sc.Continue();
-                sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromMilliseconds(1000));
+                sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromMilliseconds(config.ServiceTimeout));
                 Console.WriteLine($@"Successfully stopped service ""{config.Name}"" (""{config.Description}"")");
                 config.OnServiceContinue?.Invoke(config.Service);
             }
@@ -375,7 +375,7 @@ namespace PeterKottas.DotNetCore.WindowsService
             if (!(sc.Status == ServiceControllerStatus.StartPending | sc.Status == ServiceControllerStatus.Running))
             {
                 sc.Start();
-                sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromMilliseconds(1000));
+                sc.WaitForStatus(ServiceControllerStatus.Running, TimeSpan.FromMilliseconds(config.ServiceTimeout));
                 Console.WriteLine($@"Successfully started service ""{config.Name}"" (""{config.Description}"")");
             }
             else
