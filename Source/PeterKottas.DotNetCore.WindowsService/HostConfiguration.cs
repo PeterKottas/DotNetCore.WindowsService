@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using PeterKottas.DotNetCore.WindowsService.Enums;
 using PeterKottas.DotNetCore.WindowsService.Interfaces;
 using DasMulli.Win32.ServiceUtils;
 
 namespace PeterKottas.DotNetCore.WindowsService
 {
-    public class HostConfiguration<SERVICE> where SERVICE : IMicroService
+    public class HostConfiguration<TService>
     {
         public HostConfiguration()
         {
@@ -40,23 +38,23 @@ namespace PeterKottas.DotNetCore.WindowsService
 
         public Win32ServiceCredentials DefaultCred { get; set; } = Win32ServiceCredentials.LocalSystem;
 
-        public SERVICE Service { get; set; }
+        public TService Service { get; set; }
 
-        public Func<List<string>, IMicroServiceController, SERVICE> ServiceFactory { get; set; }
+        public Func<List<string>, IMicroServiceController, TService> ServiceFactory { get; set; }
 
-        public Action<SERVICE, List<string>> OnServiceStart { get; set; }
+        public Action<TService, List<string>> OnServiceStart { get; set; }
 
-        public Action<SERVICE> OnServiceStop { get; set; }
+        public Action<TService> OnServiceStop { get; set; }
 
-        public Action<SERVICE> OnServiceInstall { get; set; }
+        public Action<TService> OnServiceInstall { get; set; }
 
-        public Action<SERVICE> OnServiceUnInstall { get; set; }
+        public Action<TService> OnServiceUnInstall { get; set; }
 
-        public Action<SERVICE> OnServicePause { get; set; }
+        public Action<TService> OnServicePause { get; set; }
 
-        public Action<SERVICE> OnServiceContinue { get; set; }
+        public Action<TService> OnServiceContinue { get; set; }
 
-        public Action<SERVICE> OnServiceShutdown { get; set; }
+        public Action<TService> OnServiceShutdown { get; set; }
 
         public Action<Exception> OnServiceError { get; set; }
 

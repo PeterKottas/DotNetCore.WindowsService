@@ -14,7 +14,7 @@ using PeterKottas.DotNetCore.WindowsService.StateMachines;
 
 namespace PeterKottas.DotNetCore.WindowsService
 {
-    public static class ServiceRunner<SERVICE> where SERVICE : IMicroService
+    public static class ServiceRunner<SERVICE>
     {
         public static int Run(Action<HostConfigurator<SERVICE>> runAction)
         {

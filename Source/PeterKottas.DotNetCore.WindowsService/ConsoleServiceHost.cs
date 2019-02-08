@@ -10,7 +10,6 @@ namespace PeterKottas.DotNetCore.WindowsService
 	/// https://github.com/Topshelf/Topshelf/blob/develop/src/Topshelf/Hosts/ConsoleRunHost.cs
 	/// </summary>
 	class ConsoleServiceHost<SERVICE>
-		where SERVICE : IMicroService
 	{
 		private InnerService _consoleService = null;
 		private HostConfiguration<SERVICE> _innerConfig = null;
