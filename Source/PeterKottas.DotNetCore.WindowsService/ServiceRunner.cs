@@ -18,7 +18,7 @@ namespace PeterKottas.DotNetCore.WindowsService
     {
         public static int Run(Action<HostConfigurator<SERVICE>> runAction)
         {
-            Directory.SetCurrentDirectory(PlatformServices.Default.Application.ApplicationBasePath);
+            Directory.SetCurrentDirectory(System.AppContext.BaseDirectory);
 
             var innerConfig = new HostConfiguration<SERVICE>();
             innerConfig.Action = ActionEnum.RunInteractive;
@@ -220,8 +220,8 @@ namespace PeterKottas.DotNetCore.WindowsService
             var host = Process.GetCurrentProcess().MainModule.FileName;
             if (host.EndsWith("dotnet.exe", StringComparison.OrdinalIgnoreCase))
             {
-                var appPath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath,
-                    PlatformServices.Default.Application.ApplicationName + ".dll");
+                var appPath = Path.Combine(System.AppContext.BaseDirectory,
+                    System.Reflection.Assembly.GetEntryAssembly().GetName().Name + ".dll");
                 host = string.Format("{0} \"{1}\"", SanitiseArgument(host), appPath);
             }
             else

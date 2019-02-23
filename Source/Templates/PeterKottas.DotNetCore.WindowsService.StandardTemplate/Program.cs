@@ -14,12 +14,12 @@ namespace PeterKottas.DotNetCore.WindowsService.StandardTemplate
         {
 #if !DEBUG
             var configuration = new ConfigurationBuilder()
-                .SetBasePath(PlatformServices.Default.Application.ApplicationBasePath)
+                .SetBasePath(System.AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
 #else
             var configuration = new ConfigurationBuilder()
-                .SetBasePath(PlatformServices.Default.Application.ApplicationBasePath)
+                .SetBasePath(System.AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.Development.json", optional: false, reloadOnChange: true)
                 .Build();
 #endif
@@ -33,8 +33,8 @@ namespace PeterKottas.DotNetCore.WindowsService.StandardTemplate
 
                 })
                 .AddOptions()
-                .AddSingleton(new LoggerFactory()
-                .AddConsole())
+                .AddLogging(o=>o.AddConsole())
+            
                 .BuildServiceProvider();
 
             var _logger = svcProvider.GetRequiredService<ILoggerFactory>().CreateLogger<Program>();
