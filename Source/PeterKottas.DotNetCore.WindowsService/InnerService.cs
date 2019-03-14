@@ -1,9 +1,6 @@
 ﻿using DasMulli.Win32.ServiceUtils;
 using PeterKottas.DotNetCore.WindowsService.Interfaces;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace PeterKottas.DotNetCore.WindowsService
 {

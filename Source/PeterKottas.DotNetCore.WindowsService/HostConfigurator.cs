@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using PeterKottas.DotNetCore.WindowsService.Configurators.Service;
-using PeterKottas.DotNetCore.WindowsService.Interfaces;
 
 namespace PeterKottas.DotNetCore.WindowsService
 {
-    public class HostConfigurator<SERVICE> where SERVICE : IMicroService
+    public class HostConfigurator<SERVICE>
     {
         HostConfiguration<SERVICE> innerConfig;
         public HostConfigurator(HostConfiguration<SERVICE> innerConfig)

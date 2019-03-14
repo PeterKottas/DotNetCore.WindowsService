@@ -74,7 +74,7 @@ Community, feel encouraged to add more templates if you find something missing/u
 		}
 	}
 	```
-3. Api for services (and yeah, it's simmilar to Topshelf, thanks for inspiration, I just couldn't wait for you guys to implement this):
+3. Api for services (and yeah, it's similar to Topshelf, thanks for inspiration, I just couldn't wait for you guys to implement this):
 	```cs
 	ServiceRunner<ExampleService>.Run(config =>
 	{
