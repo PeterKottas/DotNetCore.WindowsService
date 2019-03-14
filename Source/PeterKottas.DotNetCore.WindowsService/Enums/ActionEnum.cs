@@ -14,6 +14,7 @@ namespace PeterKottas.DotNetCore.WindowsService.Enums
         Stop,
         Start,
         Pause,
-        Continue
+        Continue,
+        CustomCommand
     }
 }

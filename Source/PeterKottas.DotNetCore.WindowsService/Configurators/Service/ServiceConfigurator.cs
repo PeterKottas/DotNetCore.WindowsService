@@ -56,5 +56,9 @@ namespace PeterKottas.DotNetCore.WindowsService.Configurators.Service
         {
             config.OnServiceShutdown = onShutdown;
         }
+
+        public void OnCustomCommand(Action<SERVICE, int> onCustomCommand) {
+            config.OnServiceCustomCommand = onCustomCommand;
+        }
     }
 }

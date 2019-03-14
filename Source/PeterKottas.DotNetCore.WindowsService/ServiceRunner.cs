@@ -107,6 +107,15 @@ namespace PeterKottas.DotNetCore.WindowsService
                         innerConfig.DisplayName = val;
                     }
                 });
+                config.AddParameter(new CmdArgParam() {
+                    Key = "command",
+                    Description = "Send a custom command to the service.",
+                    Value = val => {
+                        if (int.TryParse(val, out var command)) {
+                            innerConfig.CustomCommand = command;
+                        }
+                    }
+                });
                 config.AddParameter(new CmdArgParam()
                 {
                     Key = "action",
@@ -138,6 +147,9 @@ namespace PeterKottas.DotNetCore.WindowsService
                                 break;
                             case "run-interactive":
                                 innerConfig.Action = ActionEnum.RunInteractive;
+                                break;
+                            case "custom-command":
+                                innerConfig.Action = ActionEnum.CustomCommand;
                                 break;
                             default:
                                 Console.WriteLine("{0} is unrecognized, will run the app as console application instead");
@@ -391,6 +403,16 @@ namespace PeterKottas.DotNetCore.WindowsService
             Install(config, sc);
         }
 
+        private static void SendCustomCommandToService(HostConfiguration<SERVICE> config, ServiceController sc) {
+            if (sc.Status == ServiceControllerStatus.Running) {
+                sc.ExecuteCommand(config.CustomCommand);
+                Console.WriteLine($@"Successfully sent custom command ({config.CustomCommand}) to service ""{config.Name}"" (""{config.Description}"")");
+                config.OnServiceCustomCommand(config.Service, config.CustomCommand);
+            } else {
+                Console.WriteLine($@"Service ""{config.Name}"" (""{config.Description}"") isn't running so can't send custom command ({config.CustomCommand})");
+            }
+        }
+
         private static void ConfigureService(HostConfiguration<SERVICE> config)
         {
             switch (config.Action)
@@ -419,6 +441,9 @@ namespace PeterKottas.DotNetCore.WindowsService
                     break;
                 case ActionEnum.Start:
                     UsingServiceController(config, (sc, cfg) => StartService(cfg, sc));
+                    break;
+                case ActionEnum.CustomCommand:
+                    UsingServiceController(config, (sc, cfg) => SendCustomCommandToService(cfg, sc));
                     break;
             }
         }
