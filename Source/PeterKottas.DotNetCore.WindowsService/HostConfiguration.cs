@@ -58,7 +58,7 @@ namespace PeterKottas.DotNetCore.WindowsService
 
         public Action<Exception> OnServiceError { get; set; }
 
-        public Action<SERVICE, int> OnServiceCustomCommand { get; set; }
+        public Action<TService, int> OnServiceCustomCommand { get; set; }
 
         public List<string> ExtraArguments { get; set; }
 
