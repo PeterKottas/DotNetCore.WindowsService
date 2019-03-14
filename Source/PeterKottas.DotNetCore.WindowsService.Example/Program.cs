@@ -8,7 +8,7 @@ namespace PeterKottas.DotNetCore.WindowsService.Example
     {
         public static void Main(string[] args)
         {
-            var fileName = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "log.txt");
+            var fileName = Path.Combine(System.AppContext.BaseDirectory, "log.txt");
             ServiceRunner<ExampleService>.Run(config =>
             {
                 var name = config.GetDefaultName();

@@ -22,7 +22,7 @@ namespace PeterKottas.DotNetCore.WindowsService.Example
             this.controller = controller;
         }
 
-        private string fileName = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "log.txt");
+        private string fileName = Path.Combine(System.AppContext.BaseDirectory, "log.txt");
         public void Start()
         {
             Console.WriteLine("I started");
