@@ -153,6 +153,10 @@ Community, feel encouraged to add more templates if you find something missing/u
 16. You can find the complete example in [PeterKottas.DotNetCore.Example](https://github.com/PeterKottas/DotNetCore.WindowsService/tree/master/Source/PeterKottas.DotNetCore.WindowsService.Example) project.
 17. Install the service using powershell: `dotnet.exe $serviceDllPath action:install`
 
+## Created and sponsored by
+
+- [GuestBell](https://guestbell.com/) - Customer centric online POS for Hotels and short terms stays.
+
 ## Contributing
 
 1. Fork it!
