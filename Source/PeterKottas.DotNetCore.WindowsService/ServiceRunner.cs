@@ -273,6 +273,7 @@ namespace PeterKottas.DotNetCore.WindowsService
                     ErrorSeverity = ErrorSeverity.Normal
                 });
                 Console.WriteLine($@"Successfully registered and started service ""{config.Name}"" (""{config.Description}"")");
+                config.OnServiceInstall?.Invoke(config.Service);
             }
             catch (Exception e)
             {
