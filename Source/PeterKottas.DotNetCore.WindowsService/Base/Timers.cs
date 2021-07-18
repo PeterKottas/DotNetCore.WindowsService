@@ -27,6 +27,24 @@ namespace PeterKottas.DotNetCore.WindowsService.Base
             }
         }
 
+        public void Start(string timerName, int interval, Func<Task> onTimer, Action<Exception> onException = null)
+        {
+            var tmpTimer = timers.Where(x => x.Name == timerName).FirstOrDefault();
+            if (tmpTimer == null)
+            {
+                tmpTimer = new Timer(timerName, interval, onTimer, onException);
+                timers.Add(tmpTimer);
+
+                tmpTimer.Start();
+            }
+            else
+            {
+                tmpTimer.Stop();
+                Update(timerName, interval, onTimer, onException);
+                tmpTimer.Start();
+            }
+        }
+
         public void Update(string timerName, int interval = 0, Action onTimer = null, Action<Exception> onException = null)
         {
             var tmpTimer = timers.Where(x => x.Name == timerName).FirstOrDefault();
@@ -35,6 +53,26 @@ namespace PeterKottas.DotNetCore.WindowsService.Base
                 if (onTimer != null)
                 {
                     tmpTimer.OnTimer = onTimer;
+                }
+                if (onException != null)
+                {
+                    tmpTimer.OnException = onException;
+                }
+                if (interval > 0 && interval != tmpTimer.Interval)
+                {
+                    tmpTimer.Interval = interval;
+                }
+            }
+        }
+
+        public void Update(string timerName, int interval = 0, Func<Task> onTimerAsync = null, Action<Exception> onException = null)
+        {
+            var tmpTimer = timers.Where(x => x.Name == timerName).FirstOrDefault();
+            if (tmpTimer != null)
+            {
+                if (onTimerAsync != null)
+                {
+                    tmpTimer.OnTimerAsync = onTimerAsync;
                 }
                 if (onException != null)
                 {
